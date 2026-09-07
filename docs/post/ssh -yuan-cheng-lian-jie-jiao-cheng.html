@@ -10,9 +10,77 @@
         let theme = localStorage.getItem("meek_theme") || "light";
         document.documentElement.setAttribute("data-color-mode", theme);
     </script>
-<meta name="description" content="未完成。">
+<meta name="description" content="# 使用OpenSSH完成ssh远程连接
+OpenSSh是目前最主流、开源的远程连接工具，用于连接两台电脑
+分为ssh-client客户端，ssh-server服务端，
+客户端用于主动连接别的机器，服务端用于允许别的机器 SSH 连进本机
+
+## 安装
+windows11系统默认安装了ssh客户端，ssh服务端安装需要主动在 设置-添加可选功能 中选择安装
+<img width='409' height='225' alt='Image' src='https://github.com/user-attachments/assets/7198e49f-0d4e-4b0a-b633-b9f05e8ae4ec' />
+
+## 
+上述安装方法可能失败，可以前往下方链接下载离线安装压缩包，进行主动安装
+https://github.com/PowerShell/Win32-OpenSSH/releases
+
+ 以OpenSSH-Win64.zip为例
+下载完成后，解压路径到
+C:\Program Files\OpenSSH-Win64
+以管理员身份打开powershell
+移动目录到OpenSSH-Win64根目录
+执行ssh服务端安装脚本   .\install-sshd.ps1
+
+提示成功后输入Get-Service sshd
+出现如图提示说明成功
+<img width='365' height='85' alt='Image' src='https://github.com/user-attachments/assets/90c221f0-5c4f-4034-af0e-eb92e206d6d2' />
+打开服务，搜索OpenSSH SSH Server ，设置启动、开机自启
+
+手动下载安装调整环境变量
+系统变量path中会新增一条 C:\Program Files\OpenSSH-Win64
+而原电脑自带环境变量 C:\Windows\System32\OpenSSH\
+调整C:\Program Files\OpenSSH-Win64 的上下位置至底端，电脑将优先使用原ssh.exe
+建议不调整，统一使用自己下载的ssh版本
+
+## 免密连接
+
+
+。">
 <meta property="og:title" content="ssh 远程连接教程">
-<meta property="og:description" content="未完成。">
+<meta property="og:description" content="# 使用OpenSSH完成ssh远程连接
+OpenSSh是目前最主流、开源的远程连接工具，用于连接两台电脑
+分为ssh-client客户端，ssh-server服务端，
+客户端用于主动连接别的机器，服务端用于允许别的机器 SSH 连进本机
+
+## 安装
+windows11系统默认安装了ssh客户端，ssh服务端安装需要主动在 设置-添加可选功能 中选择安装
+<img width='409' height='225' alt='Image' src='https://github.com/user-attachments/assets/7198e49f-0d4e-4b0a-b633-b9f05e8ae4ec' />
+
+## 
+上述安装方法可能失败，可以前往下方链接下载离线安装压缩包，进行主动安装
+https://github.com/PowerShell/Win32-OpenSSH/releases
+
+ 以OpenSSH-Win64.zip为例
+下载完成后，解压路径到
+C:\Program Files\OpenSSH-Win64
+以管理员身份打开powershell
+移动目录到OpenSSH-Win64根目录
+执行ssh服务端安装脚本   .\install-sshd.ps1
+
+提示成功后输入Get-Service sshd
+出现如图提示说明成功
+<img width='365' height='85' alt='Image' src='https://github.com/user-attachments/assets/90c221f0-5c4f-4034-af0e-eb92e206d6d2' />
+打开服务，搜索OpenSSH SSH Server ，设置启动、开机自启
+
+手动下载安装调整环境变量
+系统变量path中会新增一条 C:\Program Files\OpenSSH-Win64
+而原电脑自带环境变量 C:\Windows\System32\OpenSSH\
+调整C:\Program Files\OpenSSH-Win64 的上下位置至底端，电脑将优先使用原ssh.exe
+建议不调整，统一使用自己下载的ssh版本
+
+## 免密连接
+
+
+。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://a-bluecake.github.io/post/ssh%20-yuan-cheng-lian-jie-jiao-cheng.html">
 <meta property="og:image" content="https://avatars.githubusercontent.com/u/294737986?v=4&size=64">
@@ -73,7 +141,32 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 </div>
 </div>
     <div id="content">
-<div class="markdown-body" id="postBody"><p>未完成</p></div>
+<div class="markdown-body" id="postBody"><h1>使用OpenSSH完成ssh远程连接</h1>
+<p>OpenSSh是目前最主流、开源的远程连接工具，用于连接两台电脑<br>
+分为ssh-client客户端，ssh-server服务端，<br>
+客户端用于主动连接别的机器，服务端用于允许别的机器 SSH 连进本机</p>
+<h2>安装</h2>
+<p>windows11系统默认安装了ssh客户端，ssh服务端安装需要主动在 设置-添加可选功能 中选择安装<br>
+<a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/7198e49f-0d4e-4b0a-b633-b9f05e8ae4ec"><img width="409" height="225" alt="Image" src="https://github.com/user-attachments/assets/7198e49f-0d4e-4b0a-b633-b9f05e8ae4ec" style="max-width: 100%; height: auto; max-height: 225px;; aspect-ratio: 409 / 225; background-color: var(--bgColor-muted); border-radius: 6px" class="js-gh-image-fallback"></a></p>
+<h2></h2>
+<p>上述安装方法可能失败，可以前往下方链接下载离线安装压缩包，进行主动安装<br>
+<a href="https://github.com/PowerShell/Win32-OpenSSH/releases">https://github.com/PowerShell/Win32-OpenSSH/releases</a></p>
+<p>以OpenSSH-Win64.zip为例<br>
+下载完成后，解压路径到<br>
+C:\Program Files\OpenSSH-Win64<br>
+以管理员身份打开powershell<br>
+移动目录到OpenSSH-Win64根目录<br>
+执行ssh服务端安装脚本   .\install-sshd.ps1</p>
+<p>提示成功后输入Get-Service sshd<br>
+出现如图提示说明成功<br>
+<a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/90c221f0-5c4f-4034-af0e-eb92e206d6d2"><img width="365" height="85" alt="Image" src="https://github.com/user-attachments/assets/90c221f0-5c4f-4034-af0e-eb92e206d6d2" style="max-width: 100%; height: auto; max-height: 85px;; aspect-ratio: 365 / 85; background-color: var(--bgColor-muted); border-radius: 6px" class="js-gh-image-fallback"></a><br>
+打开服务，搜索OpenSSH SSH Server ，设置启动、开机自启</p>
+<p>手动下载安装调整环境变量<br>
+系统变量path中会新增一条 C:\Program Files\OpenSSH-Win64<br>
+而原电脑自带环境变量 C:\Windows\System32\OpenSSH<br>
+调整C:\Program Files\OpenSSH-Win64 的上下位置至底端，电脑将优先使用原ssh.exe<br>
+建议不调整，统一使用自己下载的ssh版本</p>
+<h2>免密连接</h2></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>

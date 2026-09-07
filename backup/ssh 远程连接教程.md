@@ -1,1 +1,34 @@
-未完成
+# 使用OpenSSH完成ssh远程连接
+OpenSSh是目前最主流、开源的远程连接工具，用于连接两台电脑
+分为ssh-client客户端，ssh-server服务端，
+客户端用于主动连接别的机器，服务端用于允许别的机器 SSH 连进本机
+
+## 安装
+windows11系统默认安装了ssh客户端，ssh服务端安装需要主动在 设置-添加可选功能 中选择安装
+<img width="409" height="225" alt="Image" src="https://github.com/user-attachments/assets/7198e49f-0d4e-4b0a-b633-b9f05e8ae4ec" />
+
+## 
+上述安装方法可能失败，可以前往下方链接下载离线安装压缩包，进行主动安装
+https://github.com/PowerShell/Win32-OpenSSH/releases
+
+ 以OpenSSH-Win64.zip为例
+下载完成后，解压路径到
+C:\Program Files\OpenSSH-Win64
+以管理员身份打开powershell
+移动目录到OpenSSH-Win64根目录
+执行ssh服务端安装脚本   .\install-sshd.ps1
+
+提示成功后输入Get-Service sshd
+出现如图提示说明成功
+<img width="365" height="85" alt="Image" src="https://github.com/user-attachments/assets/90c221f0-5c4f-4034-af0e-eb92e206d6d2" />
+打开服务，搜索OpenSSH SSH Server ，设置启动、开机自启
+
+手动下载安装调整环境变量
+系统变量path中会新增一条 C:\Program Files\OpenSSH-Win64
+而原电脑自带环境变量 C:\Windows\System32\OpenSSH\
+调整C:\Program Files\OpenSSH-Win64 的上下位置至底端，电脑将优先使用原ssh.exe
+建议不调整，统一使用自己下载的ssh版本
+
+## 免密连接
+
+
