@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>a-bluecake的博客</title><link>https://a-bluecake.github.io</link><description>你好，我是a-bluecake，分享计算机常用工具使用教程</description><copyright>a-bluecake的博客</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/294737986?v=4&amp;size=64</url><title>avatar</title><link>https://a-bluecake.github.io</link></image><lastBuildDate>Mon, 07 Sep 2026 07:51:36 +0000</lastBuildDate><managingEditor>a-bluecake的博客</managingEditor><ttl>60</ttl><webMaster>a-bluecake的博客</webMaster><item><title>ssh 远程连接教程</title><link>https://a-bluecake.github.io/post/ssh%20-yuan-cheng-lian-jie-jiao-cheng.html</link><description># 使用OpenSSH完成ssh远程连接
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>a-bluecake的博客</title><link>https://a-bluecake.github.io</link><description>你好，我是a-bluecake，分享计算机常用工具使用教程</description><copyright>a-bluecake的博客</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/294737986?v=4&amp;size=64</url><title>avatar</title><link>https://a-bluecake.github.io</link></image><lastBuildDate>Mon, 07 Sep 2026 08:00:22 +0000</lastBuildDate><managingEditor>a-bluecake的博客</managingEditor><ttl>60</ttl><webMaster>a-bluecake的博客</webMaster><item><title>ssh 远程连接教程</title><link>https://a-bluecake.github.io/post/ssh%20-yuan-cheng-lian-jie-jiao-cheng.html</link><description># 使用OpenSSH完成ssh远程连接
 OpenSSh是目前最主流、开源的远程连接工具，用于连接两台电脑
 分为ssh-client客户端，ssh-server服务端，
 客户端用于主动连接别的机器，服务端用于允许别的机器 SSH 连进本机
@@ -51,6 +51,8 @@ ssh-keygen 密钥生成工具
 通常ssh服务端在本机家目录的.ssh文件夹里面存放一个authorized_keys文件
 一行表示一个公钥
 本机将生成的私钥保留，公钥保存到服务器authorized_keys文件中
+将sshd_config 配置打开PubkeyAuthentication yes ，即可识别密钥登录
+
 远程推送到服务器命令 ： ssh-copy-id -i 公钥.pub -p 端口号 用户名@公网IP
 也可以手动复制黏贴到服务器的authorized_keys文件中
 

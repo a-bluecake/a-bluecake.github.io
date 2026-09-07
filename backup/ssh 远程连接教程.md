@@ -50,6 +50,8 @@ ssh-keygen 密钥生成工具
 通常ssh服务端在本机家目录的.ssh文件夹里面存放一个authorized_keys文件
 一行表示一个公钥
 本机将生成的私钥保留，公钥保存到服务器authorized_keys文件中
+将sshd_config 配置打开PubkeyAuthentication yes ，即可识别密钥登录
+
 远程推送到服务器命令 ： ssh-copy-id -i 公钥.pub -p 端口号 用户名@公网IP
 也可以手动复制黏贴到服务器的authorized_keys文件中
 
