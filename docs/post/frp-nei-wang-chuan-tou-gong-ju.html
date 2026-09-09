@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    
+    <link rel="icon" href="https://avatars.githubusercontent.com/u/294737986?v=4&size=64"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="### frp（fast reverse proxy），中文叫快速反向代理，是一款开源、免费的内网穿透工具
+
+## frp核心两个程序：frps（server 服务端）、frpc（client 客户端）
+
+通常我们使用一个具有公网ip的主机作为服务器，部署frps
+本地主机部署frpc，用于连接frps服务器，伪装成服务器上的端口，服务器将该端口收到的包发送给本地主机
+即通过反向代理，让**外网可以访问没有公网 IP 的本地内网主机上的服务**
+
+## frp的安装
+frp_0.38.0_github版本
+参考安装包链接：https://pan.baidu.com/s/1xfM1LJPO0gOHlisJluPnrQ?pwd=ya65
+来自B站视频 BV13L411w7XU
+
+**主要关注以下文件**
+Linux版本  frps二进制运行文件与ini配置文件
+<img width='507' height='42' alt='Image' src='https://github.com/user-attachments/assets/584dcc9a-3c70-46a4-807c-d657ad08abad' />
+
+Windows版本   frpc  exe运行文件与ini配置文件
+<img width='507' height='43' alt='Image' src='https://github.com/user-attachments/assets/ce12e437-129d-4d83-8789-71914901a836' />
+
+## frp实现ssh远程连接本地主机
+
+**用VScode打开Linux版本的frps.ini配置文件**
+[common]
+bind_port = 端口号1
+auth_token = 随机字符串
+**该配置的作用是创建服务端frps监听tcp端口**
+后续客户端将创建隧道，通过该端口服务器进行反向代理
+
+**用VScode打开Windows版本的frpc.ini配置文件**
+[common]
+server_addr = 服务器公网id
+server_port = 服务器frps的监听tcp端口号
+auth_token = 服务器的随机字符串
+**该配置的作用是连接服务器frps**
+
+**在frpc.ini配置文件中添加隧道**
+[ssh]
+type = tcp
+local_ip = 127.0.0.1
+local_port = 本机ssh端口号
+remote_port = 服务器frps反向代理端口号
+
+** 客户端向服务器注册，服务器端frps将创建tcp连接监听remote_port端口 **
+** 该端口的包将转发至local_ip:local_port **
+** 隧道名取名ssh （任取名）**
+
+** 连接命令：ssh 本地主机用户名@服务器公网ip -p remote_port **
+
+完整流程 ：其它主机向 服务器的remote_port端口发送包时，被frps截获发给注册的frpc ，frpc将包发给local_ip:local_port 
+
+包最后一步是本地frpc转发给本地ssh监听端口，所以local_ip填写127.0.0.1或本机实际ip地址
+
+## frp创建内网实现游戏联机
+
+**用VScode打开Linux版本的frps.ini配置文件**
+[common]
+bind_port = 端口号1
+auth_token = 随机字符串
+bind_udp_port =  端口号2
+
+**用VScode打开Windows版本的frpc.ini配置文件**
+[common]
+server_addr = 服务器公网id
+server_port = 服务器frps的监听tcp端口号
+auth_token = 服务器的随机字符串
+
+服务器使用端口号1与客户端进行连接，使用端口号2通过udp协议帮助客户端之间进行连接
+
+对于房主
+**在frpc.ini配置文件中添加隧道**
+[game-host]
+type = sudp
+role = server
+sk = 房间密码
+local_ip = 0.0.0.0
+local_port = 联机游戏端口号
+
+对于访客
+**在frpc.ini配置文件中添加隧道**
+[visit-game]
+type = sudp
+role = visitor
+server_name = game-host
+sk = 房间密码
+bind_addr = 127.0.0.1
+bind_port = 联机游戏端口号
+
+## 运行frp
+对于服务器，首先创建文件夹，内部包含frps和frps.ini
+在文件夹目录下，命令行输入 .\frps -c frps.ini
+
+对于客户端，首先创建文件夹，内部包含frpc和frpc.ini
+在文件夹目录下，命令行输入 .\frpc -c frpc.ini
+
+ssh远程连接：
+服务器开启frps后，客户端运行frpc，提示success，说明连接成功
+
+** 之后该连接命令：ssh 本地主机用户名@服务器公网ip -p remote_port 可以成功使用**
+
+创建内网实现游戏联机：
+服务器开启frps后，
+房主运行frpc，提示success
+访客运行frpc，提示success，查看房主对应cmd出现提示 incoming a new work connection for sudp proxy
+说明连接成功
+
+
+建议调试完成后写start.bat启动脚本，方便运行
+<img width='570' height='124' alt='Image' src='https://github.com/user-attachments/assets/8f37c237-3286-4ec3-bf2e-783c4bc88774' />
+
+。">
+<meta property="og:title" content="frp内网穿透工具">
+<meta property="og:description" content="### frp（fast reverse proxy），中文叫快速反向代理，是一款开源、免费的内网穿透工具
+
+## frp核心两个程序：frps（server 服务端）、frpc（client 客户端）
+
+通常我们使用一个具有公网ip的主机作为服务器，部署frps
+本地主机部署frpc，用于连接frps服务器，伪装成服务器上的端口，服务器将该端口收到的包发送给本地主机
+即通过反向代理，让**外网可以访问没有公网 IP 的本地内网主机上的服务**
+
+## frp的安装
+frp_0.38.0_github版本
+参考安装包链接：https://pan.baidu.com/s/1xfM1LJPO0gOHlisJluPnrQ?pwd=ya65
+来自B站视频 BV13L411w7XU
+
+**主要关注以下文件**
+Linux版本  frps二进制运行文件与ini配置文件
+<img width='507' height='42' alt='Image' src='https://github.com/user-attachments/assets/584dcc9a-3c70-46a4-807c-d657ad08abad' />
+
+Windows版本   frpc  exe运行文件与ini配置文件
+<img width='507' height='43' alt='Image' src='https://github.com/user-attachments/assets/ce12e437-129d-4d83-8789-71914901a836' />
+
+## frp实现ssh远程连接本地主机
+
+**用VScode打开Linux版本的frps.ini配置文件**
+[common]
+bind_port = 端口号1
+auth_token = 随机字符串
+**该配置的作用是创建服务端frps监听tcp端口**
+后续客户端将创建隧道，通过该端口服务器进行反向代理
+
+**用VScode打开Windows版本的frpc.ini配置文件**
+[common]
+server_addr = 服务器公网id
+server_port = 服务器frps的监听tcp端口号
+auth_token = 服务器的随机字符串
+**该配置的作用是连接服务器frps**
+
+**在frpc.ini配置文件中添加隧道**
+[ssh]
+type = tcp
+local_ip = 127.0.0.1
+local_port = 本机ssh端口号
+remote_port = 服务器frps反向代理端口号
+
+** 客户端向服务器注册，服务器端frps将创建tcp连接监听remote_port端口 **
+** 该端口的包将转发至local_ip:local_port **
+** 隧道名取名ssh （任取名）**
+
+** 连接命令：ssh 本地主机用户名@服务器公网ip -p remote_port **
+
+完整流程 ：其它主机向 服务器的remote_port端口发送包时，被frps截获发给注册的frpc ，frpc将包发给local_ip:local_port 
+
+包最后一步是本地frpc转发给本地ssh监听端口，所以local_ip填写127.0.0.1或本机实际ip地址
+
+## frp创建内网实现游戏联机
+
+**用VScode打开Linux版本的frps.ini配置文件**
+[common]
+bind_port = 端口号1
+auth_token = 随机字符串
+bind_udp_port =  端口号2
+
+**用VScode打开Windows版本的frpc.ini配置文件**
+[common]
+server_addr = 服务器公网id
+server_port = 服务器frps的监听tcp端口号
+auth_token = 服务器的随机字符串
+
+服务器使用端口号1与客户端进行连接，使用端口号2通过udp协议帮助客户端之间进行连接
+
+对于房主
+**在frpc.ini配置文件中添加隧道**
+[game-host]
+type = sudp
+role = server
+sk = 房间密码
+local_ip = 0.0.0.0
+local_port = 联机游戏端口号
+
+对于访客
+**在frpc.ini配置文件中添加隧道**
+[visit-game]
+type = sudp
+role = visitor
+server_name = game-host
+sk = 房间密码
+bind_addr = 127.0.0.1
+bind_port = 联机游戏端口号
+
+## 运行frp
+对于服务器，首先创建文件夹，内部包含frps和frps.ini
+在文件夹目录下，命令行输入 .\frps -c frps.ini
+
+对于客户端，首先创建文件夹，内部包含frpc和frpc.ini
+在文件夹目录下，命令行输入 .\frpc -c frpc.ini
+
+ssh远程连接：
+服务器开启frps后，客户端运行frpc，提示success，说明连接成功
+
+** 之后该连接命令：ssh 本地主机用户名@服务器公网ip -p remote_port 可以成功使用**
+
+创建内网实现游戏联机：
+服务器开启frps后，
+房主运行frpc，提示success
+访客运行frpc，提示success，查看房主对应cmd出现提示 incoming a new work connection for sudp proxy
+说明连接成功
+
+
+建议调试完成后写start.bat启动脚本，方便运行
+<img width='570' height='124' alt='Image' src='https://github.com/user-attachments/assets/8f37c237-3286-4ec3-bf2e-783c4bc88774' />
+
+。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://a-bluecake.github.io/post/frp-nei-wang-chuan-tou-gong-ju.html">
+<meta property="og:image" content="https://avatars.githubusercontent.com/u/294737986?v=4&size=64">
+<title>frp内网穿透工具</title>
+
+
+
+</head>
+<style>
+body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top:64px; text-align: center;font-size: small;}
+
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:40px;font-weight:bold;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 8px;}
+    .postTitle{font-size:24px;}
+}
+
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">frp内网穿透工具</h1>
+<div class="title-right">
+    <a href="https://a-bluecake.github.io" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/a-bluecake/a-bluecake.github.io/issues/3" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><h3>frp（fast reverse proxy），中文叫快速反向代理，是一款开源、免费的内网穿透工具</h3>
+<h2>frp核心两个程序：frps（server 服务端）、frpc（client 客户端）</h2>
+<p>通常我们使用一个具有公网ip的主机作为服务器，部署frps<br>
+本地主机部署frpc，用于连接frps服务器，伪装成服务器上的端口，服务器将该端口收到的包发送给本地主机<br>
+即通过反向代理，让<strong>外网可以访问没有公网 IP 的本地内网主机上的服务</strong></p>
+<h2>frp的安装</h2>
+<p>frp_0.38.0_github版本<br>
+参考安装包链接：<a href="https://pan.baidu.com/s/1xfM1LJPO0gOHlisJluPnrQ?pwd=ya65" rel="nofollow">https://pan.baidu.com/s/1xfM1LJPO0gOHlisJluPnrQ?pwd=ya65</a><br>
+来自B站视频 BV13L411w7XU</p>
+<p><strong>主要关注以下文件</strong><br>
+Linux版本  frps二进制运行文件与ini配置文件<br>
+<a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/584dcc9a-3c70-46a4-807c-d657ad08abad"><img width="507" height="42" alt="Image" src="https://github.com/user-attachments/assets/584dcc9a-3c70-46a4-807c-d657ad08abad" style="max-width: 100%; height: auto; max-height: 42px;; aspect-ratio: 507 / 42; background-color: var(--bgColor-muted); border-radius: 6px" class="js-gh-image-fallback"></a></p>
+<p>Windows版本   frpc  exe运行文件与ini配置文件<br>
+<a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/ce12e437-129d-4d83-8789-71914901a836"><img width="507" height="43" alt="Image" src="https://github.com/user-attachments/assets/ce12e437-129d-4d83-8789-71914901a836" style="max-width: 100%; height: auto; max-height: 43px;; aspect-ratio: 507 / 43; background-color: var(--bgColor-muted); border-radius: 6px" class="js-gh-image-fallback"></a></p>
+<h2>frp实现ssh远程连接本地主机</h2>
+<p><strong>用VScode打开Linux版本的frps.ini配置文件</strong><br>
+[common]<br>
+bind_port = 端口号1<br>
+auth_token = 随机字符串<br>
+<strong>该配置的作用是创建服务端frps监听tcp端口</strong><br>
+后续客户端将创建隧道，通过该端口服务器进行反向代理</p>
+<p><strong>用VScode打开Windows版本的frpc.ini配置文件</strong><br>
+[common]<br>
+server_addr = 服务器公网id<br>
+server_port = 服务器frps的监听tcp端口号<br>
+auth_token = 服务器的随机字符串<br>
+<strong>该配置的作用是连接服务器frps</strong></p>
+<p><strong>在frpc.ini配置文件中添加隧道</strong><br>
+[ssh]<br>
+type = tcp<br>
+local_ip = 127.0.0.1<br>
+local_port = 本机ssh端口号<br>
+remote_port = 服务器frps反向代理端口号</p>
+<p>** 客户端向服务器注册，服务器端frps将创建tcp连接监听remote_port端口 **<br>
+** 该端口的包将转发至local_ip:local_port **<br>
+** 隧道名取名ssh （任取名）**</p>
+<p>** 连接命令：ssh 本地主机用户名@服务器公网ip -p remote_port **</p>
+<p>完整流程 ：其它主机向 服务器的remote_port端口发送包时，被frps截获发给注册的frpc ，frpc将包发给local_ip:local_port</p>
+<p>包最后一步是本地frpc转发给本地ssh监听端口，所以local_ip填写127.0.0.1或本机实际ip地址</p>
+<h2>frp创建内网实现游戏联机</h2>
+<p><strong>用VScode打开Linux版本的frps.ini配置文件</strong><br>
+[common]<br>
+bind_port = 端口号1<br>
+auth_token = 随机字符串<br>
+bind_udp_port =  端口号2</p>
+<p><strong>用VScode打开Windows版本的frpc.ini配置文件</strong><br>
+[common]<br>
+server_addr = 服务器公网id<br>
+server_port = 服务器frps的监听tcp端口号<br>
+auth_token = 服务器的随机字符串</p>
+<p>服务器使用端口号1与客户端进行连接，使用端口号2通过udp协议帮助客户端之间进行连接</p>
+<p>对于房主<br>
+<strong>在frpc.ini配置文件中添加隧道</strong><br>
+[game-host]<br>
+type = sudp<br>
+role = server<br>
+sk = 房间密码<br>
+local_ip = 0.0.0.0<br>
+local_port = 联机游戏端口号</p>
+<p>对于访客<br>
+<strong>在frpc.ini配置文件中添加隧道</strong><br>
+[visit-game]<br>
+type = sudp<br>
+role = visitor<br>
+server_name = game-host<br>
+sk = 房间密码<br>
+bind_addr = 127.0.0.1<br>
+bind_port = 联机游戏端口号</p>
+<h2>运行frp</h2>
+<p>对于服务器，首先创建文件夹，内部包含frps和frps.ini<br>
+在文件夹目录下，命令行输入 .\frps -c frps.ini</p>
+<p>对于客户端，首先创建文件夹，内部包含frpc和frpc.ini<br>
+在文件夹目录下，命令行输入 .\frpc -c frpc.ini</p>
+<p>ssh远程连接：<br>
+服务器开启frps后，客户端运行frpc，提示success，说明连接成功</p>
+<p>** 之后该连接命令：ssh 本地主机用户名@服务器公网ip -p remote_port 可以成功使用**</p>
+<p>创建内网实现游戏联机：<br>
+服务器开启frps后，<br>
+房主运行frpc，提示success<br>
+访客运行frpc，提示success，查看房主对应cmd出现提示 incoming a new work connection for sudp proxy<br>
+说明连接成功</p>
+<p>建议调试完成后写start.bat启动脚本，方便运行<br>
+<a target="_blank" rel="noopener noreferrer" href="https://github.com/user-attachments/assets/8f37c237-3286-4ec3-bf2e-783c4bc88774"><img width="570" height="124" alt="Image" src="https://github.com/user-attachments/assets/8f37c237-3286-4ec3-bf2e-783c4bc88774" style="max-width: 100%; height: auto; max-height: 124px;; aspect-ratio: 570 / 124; background-color: var(--bgColor-muted); border-radius: 6px" class="js-gh-image-fallback"></a></p></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://a-bluecake.github.io">a-bluecake的博客</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if(""!=""){
+    var startSite=new Date("");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行 "+diffDay+" 天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.disabled=true;
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","a-bluecake/a-bluecake.github.io");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+
+
+
+</script>
+
+
+</html>
