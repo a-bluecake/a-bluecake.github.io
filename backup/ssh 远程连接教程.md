@@ -78,5 +78,31 @@ Host github.com             # ssh github.com 时自动使用下方配置
 ‘
 当 ssh github.com 自动根据配置补全 ssh -i 私钥路径 -p 端口号 用户名@公网IP
 
-###
 (可以下载VSCode插件Remote - SSH ，通过vscode左侧远程资源管理器远程ssh连接，图形化查看远程主机文件)
+
+### 快速查找笔记
+OpenSSH:
+
+离线压缩包：https://github.com/PowerShell/Win32-OpenSSH/releases
+
+连接命令
+端口： ssh -p 端口号 用户名@主机ip
+可视化： ssh -v 用户名@主机ip
+密钥： ssh -i 密钥文件 用户名@主机ip
+
+ssh-keygen 密钥生成工具
+生成密钥： ssh-keygen -t ed25519 -f 密钥文件名
+
+ssh服务端配置文件：
+Windows：C:\ProgramData\ssh\sshd_config (修改#Port更改运行端口号)
+Linux：/etc/ssh/sshd_config (修改#Port更改运行端口号)
+
+ssh用户端配置文件：
+Windows： C:\Users\用户名\.ssh目录下 新增config配置文件
+配置host示例：
+    Host github.com # ssh github.com 时自动使用下方配置
+    HostName ssh.github.com # 连接时ip地址或域名地址
+    User git # 连接时账号名
+    Port 443 # 连接端口号
+    IdentityFile ~/.ssh/git_github # 私钥位置与私钥名
+

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>a-bluecake的博客</title><link>https://a-bluecake.github.io</link><description>你好，我是a-bluecake，分享计算机相关知识</description><copyright>a-bluecake的博客</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/294737986?v=4&amp;size=64</url><title>avatar</title><link>https://a-bluecake.github.io</link></image><lastBuildDate>Wed, 09 Sep 2026 19:03:45 +0000</lastBuildDate><managingEditor>a-bluecake的博客</managingEditor><ttl>60</ttl><webMaster>a-bluecake的博客</webMaster><item><title>frp内网穿透工具</title><link>https://a-bluecake.github.io/post/frp-nei-wang-chuan-tou-gong-ju.html</link><description>### frp（fast reverse proxy），中文叫快速反向代理，是一款开源、免费的内网穿透工具
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>a-bluecake的博客</title><link>https://a-bluecake.github.io</link><description>你好，我是a-bluecake，分享计算机相关知识</description><copyright>a-bluecake的博客</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/294737986?v=4&amp;size=64</url><title>avatar</title><link>https://a-bluecake.github.io</link></image><lastBuildDate>Thu, 10 Sep 2026 01:09:34 +0000</lastBuildDate><managingEditor>a-bluecake的博客</managingEditor><ttl>60</ttl><webMaster>a-bluecake的博客</webMaster><item><title>frp内网穿透工具</title><link>https://a-bluecake.github.io/post/frp-nei-wang-chuan-tou-gong-ju.html</link><description>### frp（fast reverse proxy），中文叫快速反向代理，是一款开源、免费的内网穿透工具
 
 ## frp核心两个程序：frps（server 服务端）、frpc（client 客户端）
 
@@ -189,6 +189,32 @@ Host github.com             # ssh github.com 时自动使用下方配置
 ‘
 当 ssh github.com 自动根据配置补全 ssh -i 私钥路径 -p 端口号 用户名@公网IP
 
-###
 (可以下载VSCode插件Remote - SSH ，通过vscode左侧远程资源管理器远程ssh连接，图形化查看远程主机文件)
+
+### 快速查找笔记
+OpenSSH:
+
+离线压缩包：https://github.com/PowerShell/Win32-OpenSSH/releases
+
+连接命令
+端口： ssh -p 端口号 用户名@主机ip
+可视化： ssh -v 用户名@主机ip
+密钥： ssh -i 密钥文件 用户名@主机ip
+
+ssh-keygen 密钥生成工具
+生成密钥： ssh-keygen -t ed25519 -f 密钥文件名
+
+ssh服务端配置文件：
+Windows：C:\ProgramData\ssh\sshd_config (修改#Port更改运行端口号)
+Linux：/etc/ssh/sshd_config (修改#Port更改运行端口号)
+
+ssh用户端配置文件：
+Windows： C:\Users\用户名\.ssh目录下 新增config配置文件
+配置host示例：
+    Host github.com # ssh github.com 时自动使用下方配置
+    HostName ssh.github.com # 连接时ip地址或域名地址
+    User git # 连接时账号名
+    Port 443 # 连接端口号
+    IdentityFile ~/.ssh/git_github # 私钥位置与私钥名
+
 。</description><guid isPermaLink="true">https://a-bluecake.github.io/post/ssh%20-yuan-cheng-lian-jie-jiao-cheng.html</guid><pubDate>Mon, 07 Sep 2026 05:01:24 +0000</pubDate></item></channel></rss>
