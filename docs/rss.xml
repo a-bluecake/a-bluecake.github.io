@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>a-bluecake的博客</title><link>https://a-bluecake.github.io</link><description>你好，我是a-bluecake，分享计算机相关知识</description><copyright>a-bluecake的博客</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/294737986?v=4&amp;size=64</url><title>avatar</title><link>https://a-bluecake.github.io</link></image><lastBuildDate>Thu, 10 Sep 2026 01:09:34 +0000</lastBuildDate><managingEditor>a-bluecake的博客</managingEditor><ttl>60</ttl><webMaster>a-bluecake的博客</webMaster><item><title>frp内网穿透工具</title><link>https://a-bluecake.github.io/post/frp-nei-wang-chuan-tou-gong-ju.html</link><description>### frp（fast reverse proxy），中文叫快速反向代理，是一款开源、免费的内网穿透工具
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>a-bluecake的博客</title><link>https://a-bluecake.github.io</link><description>你好，我是a-bluecake，分享计算机相关知识</description><copyright>a-bluecake的博客</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/294737986?v=4&amp;size=64</url><title>avatar</title><link>https://a-bluecake.github.io</link></image><lastBuildDate>Thu, 10 Sep 2026 01:23:44 +0000</lastBuildDate><managingEditor>a-bluecake的博客</managingEditor><ttl>60</ttl><webMaster>a-bluecake的博客</webMaster><item><title>frp内网穿透工具</title><link>https://a-bluecake.github.io/post/frp-nei-wang-chuan-tou-gong-ju.html</link><description>### frp（fast reverse proxy），中文叫快速反向代理，是一款开源、免费的内网穿透工具
 
 ## frp核心两个程序：frps（server 服务端）、frpc（client 客户端）
 
@@ -109,6 +109,57 @@ ssh远程连接：
 建议调试完成后写start.bat启动脚本，方便运行
 &lt;img width='570' height='124' alt='Image' src='https://github.com/user-attachments/assets/8f37c237-3286-4ec3-bf2e-783c4bc88774' /&gt;
 
+
+
+## 快速查找笔记
+frp:
+
+参考安装包链接：https://pan.baidu.com/s/1xfM1LJPO0gOHlisJluPnrQ?pwd=ya65
+
+服务器运行frps ,客户端运行frpc 
+运行frp命令：
+服务器： .\frps -c frps.ini
+客户端： .\frpc -c frpc.ini
+
+远程pc端连接ssh隧道命令 ssh 本地主机用户名@服务器公网ip -p remote_port
+
+frps.ini配置：tcp和udp连接隧道
+[common]
+bind_port = 端口号1
+auth_token = 随机字符串
+bind_udp_port = 端口号2
+
+frpc.ini配置：连接服务器
+[common]
+server_addr = 服务器公网id
+server_port = 服务器frps的监听tcp端口号
+auth_token = 服务器的随机字符串
+
+frpc.ini配置：注册隧道
+
+反向代理隧道：
+[ssh]
+type = tcp
+local_ip = 127.0.0.1
+local_port = 本机ssh端口号
+remote_port = 服务器frps反向代理端口号
+
+房主创建房间隧道：
+[game-host]
+type = sudp
+role = server
+sk = 房间密码
+local_ip = 0.0.0.0
+local_port = 联机游戏端口号
+
+访客连接隧道
+[visit-game]
+type = sudp
+role = visitor
+server_name = game-host
+sk = 房间密码
+bind_addr = 127.0.0.1
+bind_port = 联机游戏端口号
 。</description><guid isPermaLink="true">https://a-bluecake.github.io/post/frp-nei-wang-chuan-tou-gong-ju.html</guid><pubDate>Wed, 09 Sep 2026 13:47:45 +0000</pubDate></item><item><title>ssh 远程连接教程</title><link>https://a-bluecake.github.io/post/ssh%20-yuan-cheng-lian-jie-jiao-cheng.html</link><description># 使用OpenSSH完成ssh远程连接
 OpenSSh是目前最主流、开源的远程连接工具，用于连接两台电脑
 分为ssh-client客户端，ssh-server服务端，

@@ -108,3 +108,54 @@ ssh远程连接：
 建议调试完成后写start.bat启动脚本，方便运行
 <img width="570" height="124" alt="Image" src="https://github.com/user-attachments/assets/8f37c237-3286-4ec3-bf2e-783c4bc88774" />
 
+
+
+## 快速查找笔记
+frp:
+
+参考安装包链接：https://pan.baidu.com/s/1xfM1LJPO0gOHlisJluPnrQ?pwd=ya65
+
+服务器运行frps ,客户端运行frpc 
+运行frp命令：
+服务器： .\frps -c frps.ini
+客户端： .\frpc -c frpc.ini
+
+远程pc端连接ssh隧道命令 ssh 本地主机用户名@服务器公网ip -p remote_port
+
+frps.ini配置：tcp和udp连接隧道
+[common]
+bind_port = 端口号1
+auth_token = 随机字符串
+bind_udp_port = 端口号2
+
+frpc.ini配置：连接服务器
+[common]
+server_addr = 服务器公网id
+server_port = 服务器frps的监听tcp端口号
+auth_token = 服务器的随机字符串
+
+frpc.ini配置：注册隧道
+
+反向代理隧道：
+[ssh]
+type = tcp
+local_ip = 127.0.0.1
+local_port = 本机ssh端口号
+remote_port = 服务器frps反向代理端口号
+
+房主创建房间隧道：
+[game-host]
+type = sudp
+role = server
+sk = 房间密码
+local_ip = 0.0.0.0
+local_port = 联机游戏端口号
+
+访客连接隧道
+[visit-game]
+type = sudp
+role = visitor
+server_name = game-host
+sk = 房间密码
+bind_addr = 127.0.0.1
+bind_port = 联机游戏端口号
