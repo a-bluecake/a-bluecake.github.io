@@ -1,12 +1,17 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>a-bluecake的博客</title><link>https://a-bluecake.github.io</link><description>你好，我是a-bluecake，分享计算机相关知识</description><copyright>a-bluecake的博客</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/294737986?v=4&amp;size=64</url><title>avatar</title><link>https://a-bluecake.github.io</link></image><lastBuildDate>Thu, 10 Sep 2026 03:14:13 +0000</lastBuildDate><managingEditor>a-bluecake的博客</managingEditor><ttl>60</ttl><webMaster>a-bluecake的博客</webMaster><item><title>MorkDown语法</title><link>https://a-bluecake.github.io/post/MorkDown-yu-fa.html</link><description>MarkDown 是一种轻量级标记语言
-MarkDown 的后缀名是.md
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>a-bluecake的博客</title><link>https://a-bluecake.github.io</link><description>你好，我是a-bluecake，分享计算机相关知识</description><copyright>a-bluecake的博客</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/294737986?v=4&amp;size=64</url><title>avatar</title><link>https://a-bluecake.github.io</link></image><lastBuildDate>Thu, 10 Sep 2026 04:27:35 +0000</lastBuildDate><managingEditor>a-bluecake的博客</managingEditor><ttl>60</ttl><webMaster>a-bluecake的博客</webMaster><item><title>MorkDown语法</title><link>https://a-bluecake.github.io/post/MorkDown-yu-fa.html</link><description>**MarkDown 是一种轻量级标记语言，用简单符号标记文本结构，将纯文本转换成富文本，**
+**在互联网行业里有很高的使用率**
 
-元素分为块级元素（占据一行）、行内元素（占据一行的一部分）
-块级元素 
-行内元素1 行内元素2 行内元素3
+**MarkDown 的后缀名是.md**
 
-exanple.md
+MarkDown中有两种元素
+块级元素（占据一行）、行内元素（占据一行的一部分）
+
+下方整理了一些MarkDown标签元素
+通过github的Issues进行渲染
+不同编辑器的规则不同，可能不支持全部语法
+
+## 块级元素
 
 标题使用 # 分为六级标题
 # 标题1
@@ -73,13 +78,57 @@ markdown[^标记语言]
  ---
 
 
-链接的格式是[](url) []里面填写链接的文本，url里面填访问地址
+##行内元素
+
+链接的格式是[]加上(url)    []里面填写链接的文本，url里面填访问地址
 url后面加字符串表示鼠标悬浮链接上时显示的文本
 使用关键字解释的方式可以实现引用链接，但是大多数平台不适用
+url里面也可以填写#标题1实现跳转
 链接：
 [百度](baidu.com'一个搜索引擎')
 [百度][id]
 [id]: baidu.com'一个搜索引擎'
+请参考[标题1](#标题1)
+
+可以直接写url链接，自动转变为链接
+URL:
+www.baidu.com
+https://www.baidu.com
+
+图片链接格式是 ![]加上(url)
+图片链接：
+![百度](https://www.baidu.com/favicon.ico)
+
+斜体：使用一对星号
+加粗：使用一对双星号
+行内代码：使用一对反引号  （多行代码使用一对 三反引号）
+*斜体* **加粗**
+`printf()`
+
+下划线：使用html的 &lt;加上u加上&gt; 标签
+ &lt;u&gt;下划线&lt;/u&gt;
+没有成功渲染
+
+表情：使用:加上smile加上:
+:smile:
+
+下标：使用一对~
+上标：使用方尖号
+H~2~O
+X^2
+没有成功渲染
+
+文字高亮：使用一对==
+==这是一段高亮文字==
+没有成功渲染
+
+嵌入视频：
+黏贴视频嵌入代码
+
+&lt;iframe src='//player.bilibili.com/player.html?isOutside=true&amp;aid=117228565500250&amp;bvid=BV1DRbA6PENy&amp;cid=41658811359&amp;p=1' scrolling='no' border='0' frameborder='no' framespacing='0' allowfullscreen='true'&gt;&lt;/iframe&gt;
+
+没有成功渲染
+
 
 
 [^标记语言]:告诉解释器文本结构/样式。</description><guid isPermaLink="true">https://a-bluecake.github.io/post/MorkDown-yu-fa.html</guid><pubDate>Thu, 10 Sep 2026 03:13:44 +0000</pubDate></item><item><title>frp内网穿透工具</title><link>https://a-bluecake.github.io/post/frp-nei-wang-chuan-tou-gong-ju.html</link><description>### frp（fast reverse proxy），中文叫快速反向代理，是一款开源、免费的内网穿透工具
