@@ -1,5 +1,55 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>a-bluecake的博客</title><link>https://a-bluecake.github.io</link><description>你好，我是a-bluecake，分享计算机相关知识</description><copyright>a-bluecake的博客</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/294737986?v=4&amp;size=64</url><title>avatar</title><link>https://a-bluecake.github.io</link></image><lastBuildDate>Thu, 10 Sep 2026 04:27:35 +0000</lastBuildDate><managingEditor>a-bluecake的博客</managingEditor><ttl>60</ttl><webMaster>a-bluecake的博客</webMaster><item><title>MorkDown语法</title><link>https://a-bluecake.github.io/post/MorkDown-yu-fa.html</link><description>**MarkDown 是一种轻量级标记语言，用简单符号标记文本结构，将纯文本转换成富文本，**
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>a-bluecake的博客</title><link>https://a-bluecake.github.io</link><description>你好，我是a-bluecake，分享计算机相关知识</description><copyright>a-bluecake的博客</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/294737986?v=4&amp;size=64</url><title>avatar</title><link>https://a-bluecake.github.io</link></image><lastBuildDate>Mon, 14 Sep 2026 08:42:24 +0000</lastBuildDate><managingEditor>a-bluecake的博客</managingEditor><ttl>60</ttl><webMaster>a-bluecake的博客</webMaster><item><title>基于 SSH 的远程文件传输：SCP 拷贝命令 与 SFTP 交互式终端教程</title><link>https://a-bluecake.github.io/post/ji-yu-%20SSH%20-de-yuan-cheng-wen-jian-chuan-shu-%EF%BC%9ASCP%20-kao-bei-ming-ling-%20-yu-%20SFTP%20-jiao-hu-shi-zhong-duan-jiao-cheng.html</link><description>## SFTP（SSH File Transfer Protocol）是一种SSH 文件传输协议
+### 底层是ssh远程连接
+参考 _ssh 远程连接教程_ #2
+
+确定已经安装部署好了OpenSSH
+
+## 使用SSH的 SFTP 子系统完成文件传输
+
+### 连接SFTP
+**命令 ： sftp 用户名@主机IP**
+-P 参数选择端口号
+-i 参数使用密钥
+默认继承ssh的config配置
+配置了config后，命令使用自定义的host名 代替 用户名@主机IP ，且自动使用配置的-P -i 等参数
+
+提示连接成功后，终端输入显示
+sftp&gt;
+表示成功进入sftp连接
+常用命令
+
+cd 切换目标主机目录
+lcd 切换本地主机目录
+
+pwd 查看目标主机目录
+lpwd 查看本地主机目录
+
+从本地上传文件到目标主机
+**put [参数] 本地文件 目标目录**
+使用参数 -r 上传文件夹 
+
+从目标主机下载文件到本地
+**get [参数] 目标主机文件 本地目录**
+使用参数 -r 下载文件夹 
+
+默认使用当前pwd/lpwd读取的工作目录为起始目录
+
+### sftp可能不支持命令行常用命令，只提供了一些简单命令完成基础功能
+列举：
+
+rm 删除文件命令
+rmdir 删除空文件夹
+删除命令不支持-r参数，删除文件夹需要先手动删除文件夹内部文件
+
+rename 远程重命名文件 / 文件夹 
+不支持rm命令重命名，使用rename替代，不需要-r参数
+
+! 临时进入本地主机的命令行，exit后返回sftp连接
+!命令 用本地命令行执行命令
+
+## SCP命令
+**SCP（Secure Copy，安全拷贝）**，是基于 **SSH 协议** 的文件传输工具，复用 SSH 的 22 端口，传输全程加密。</description><guid isPermaLink="true">https://a-bluecake.github.io/post/ji-yu-%20SSH%20-de-yuan-cheng-wen-jian-chuan-shu-%EF%BC%9ASCP%20-kao-bei-ming-ling-%20-yu-%20SFTP%20-jiao-hu-shi-zhong-duan-jiao-cheng.html</guid><pubDate>Mon, 14 Sep 2026 08:41:56 +0000</pubDate></item><item><title>MorkDown语法</title><link>https://a-bluecake.github.io/post/MorkDown-yu-fa.html</link><description>**MarkDown 是一种轻量级标记语言，用简单符号标记文本结构，将纯文本转换成富文本，**
 **在互联网行业里有很高的使用率**
 
 **MarkDown 的后缀名是.md**
