@@ -1,5 +1,56 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>a-bluecake的博客</title><link>https://a-bluecake.github.io</link><description>你好，我是a-bluecake，分享计算机相关知识</description><copyright>a-bluecake的博客</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/294737986?v=4&amp;size=64</url><title>avatar</title><link>https://a-bluecake.github.io</link></image><lastBuildDate>Mon, 14 Sep 2026 08:42:24 +0000</lastBuildDate><managingEditor>a-bluecake的博客</managingEditor><ttl>60</ttl><webMaster>a-bluecake的博客</webMaster><item><title>基于 SSH 的远程文件传输：SCP 拷贝命令 与 SFTP 交互式终端教程</title><link>https://a-bluecake.github.io/post/ji-yu-%20SSH%20-de-yuan-cheng-wen-jian-chuan-shu-%EF%BC%9ASCP%20-kao-bei-ming-ling-%20-yu-%20SFTP%20-jiao-hu-shi-zhong-duan-jiao-cheng.html</link><description>## SFTP（SSH File Transfer Protocol）是一种SSH 文件传输协议
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>a-bluecake的博客</title><link>https://a-bluecake.github.io</link><description>你好，我是a-bluecake，分享计算机相关知识</description><copyright>a-bluecake的博客</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/294737986?v=4&amp;size=64</url><title>avatar</title><link>https://a-bluecake.github.io</link></image><lastBuildDate>Mon, 21 Sep 2026 08:55:34 +0000</lastBuildDate><managingEditor>a-bluecake的博客</managingEditor><ttl>60</ttl><webMaster>a-bluecake的博客</webMaster><item><title>RAG流程介绍与基本解析</title><link>https://a-bluecake.github.io/post/RAG-liu-cheng-jie-shao-yu-ji-ben-jie-xi.html</link><description># RAG（Retrieval-Augmented Generation）检索增强生成
+
+## RAG有什么用
+目前常见的AI项目：企业知识库、客服机器人、文档助手，都需要使用RAG
+
+即使大语言模型LLM已经有了较强的能力，仍需要RAG外挂知识库
+
+LLM的本质仍是预测下一个TOKEN ，这会带来一些问题
+1. 幻觉
+2. 知识过时
+3. 私有数据
+
+如果选择提前将全部文档输入给LLM，又会因为
+- 上下文窗口 无法容纳
+- 成本 巨大
+- 响应速度 过于缓慢
+
+等原因不可实现
+
+**最合理的方式是LLM回答之前，先找到最相关的几页或几端内容，再交给LLM处理**
+
+RAG就是在LLM生成回答之前，从外部知识库检索相关文档片段，把检索到的上下文同用户问题一起交给LLM
+
+**RAG不改变LLM本身，而是通过外挂式检索知识库，最大化增强LLM语言理解与生成能力**
+
+RAG的本质：在模型回答之前，先检索资料，再交付LLM生成答案
+
+## RAG的核心流程
+### 第一阶段 数据准备
+1. 获得全部文档
+2. 将文档进行chunking切分成多个chunk块
+3. 将每个chunk块进行embedding向量化
+4. 每个chunk块的文本内容和对应向量一起存入数据库
+### 第二阶段 用户提问
+1. 用户提出问题
+2. 将用户问题embedding向量化，得到对应向量
+3. 先进行相似度检索（向量相似度检索常使用 余弦相似度/欧式距离），然后返回相似度最高的k个chunk块文档，这一步叫作**召回**
+4. 对召回的四个chunk块进行rerank**重排**，即判断召回的块是否能回答问题，只保留能回答问题的chunk块
+5. 将chunk块对应的文档、用户问题、提示词一起组成prompt，交给LLM
+6. LLM生成答案，交付用户
+
+## RAG容易遇到的难点
+1. 数据准备阶段，将数据进行切分时，数据文档的格式各式各样如pdf、表格、图片等，需要进行数据清洗，最好统一转化为md格式
+2. 数据准备阶段，块的切分大小需要合适，太大会检索不精确，太小容易造成语义断裂，信息的颗粒度需要划分的刚好
+3. 用户提问阶段，用户提出问题可能需要进行问题重写，补充问题的隐含信息
+4. 用户提问阶段，检索方式可以使用混合检索方式，包含向量相似度检索和关键词检索
+5. 用户提问阶段，生成答案的LLM模型一定要满足基本的能力要求，可以使用开源模型本地部署
+
+ 
+
+
+。</description><guid isPermaLink="true">https://a-bluecake.github.io/post/RAG-liu-cheng-jie-shao-yu-ji-ben-jie-xi.html</guid><pubDate>Mon, 21 Sep 2026 08:55:02 +0000</pubDate></item><item><title>基于 SSH 的远程文件传输：SCP 拷贝命令 与 SFTP 交互式终端教程</title><link>https://a-bluecake.github.io/post/ji-yu-%20SSH%20-de-yuan-cheng-wen-jian-chuan-shu-%EF%BC%9ASCP%20-kao-bei-ming-ling-%20-yu-%20SFTP%20-jiao-hu-shi-zhong-duan-jiao-cheng.html</link><description>## SFTP（SSH File Transfer Protocol）是一种SSH 文件传输协议
 ### 底层是ssh远程连接
 参考 _ssh 远程连接教程_ #2
 
