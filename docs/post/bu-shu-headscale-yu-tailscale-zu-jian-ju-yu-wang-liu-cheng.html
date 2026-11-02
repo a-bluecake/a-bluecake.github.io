@@ -10,9 +10,203 @@
         let theme = localStorage.getItem("meek_theme") || "light";
         document.documentElement.setAttribute("data-color-mode", theme);
     </script>
-<meta name="description" content="111。">
+<meta name="description" content="## headscale与tailscale
+headscale用于自建私有控制服务器，其兼容 Tailscale 协议，用于替代 Tailscale 官方的控制服务器
+你需要在一个拥有公网ip的服务器部署headscale
+
+tailscale 负责主机互相连接，搭成局域网
+
+**注：
+使用客户端接入服务器时，只能通过https服务器接入，
+为此，在服务器部署headscale服务时，需要为这个服务提供一个域名，
+用于签订证书，获得https地址**
+
+### 请使用大模型辅助安装
+_全流程较复杂，建议使用agent助手进行辅助安装，
+将下方流程发给你的agent作为参考即可_
+手动安装请查询大模型各种配置文件写法
+
+## 服务器部署headscale
+**部署过程需要使用ngnix和docker，确保你已经安装好了这两个应用**
+
+### 1、使用docker部署headscale
+
+**目录结构准备：**
+选择一个合适的工作目录，新建文件docker-compose.yml
+在同目录下创建lib文件夹和config文件夹，config文件夹下新建文件config.yml
+lib文件夹用于存放headscale 的**数据持久化目录**
+config文件夹用于存放headscale的配置
+
+**编写配置文件：**
+编写当前目录下docker-compose.yml
+在config目录下编写config.yml
+
+**使用docker部署：**
+切换到docker-compose.yml所在目录，
+docker compose up -d  命令进行安装
+docker compose ps  查看状态
+
+通过IP加端口号（或域名）可以访问到你的服务即成功
+
+### 2、使用ngnix进行反向代理并配置证书
+**ngnix进行反向代理**
+编写ngnix的配置文件即可
+
+**配置证书**
+推荐下载 acme.sh 脚本，签发证书后，在ngnix配置中添加证书位置
+详细过程请查询相关命令
+
+**验证**
+浏览器访问你的域名，查看是否成功代理到你的headscale服务
+
+### 3、使用headscale
+docker exec headscale的意思是执行docker里面headsacle程序中的命令
+**创建admin用户**
+`docker exec headscale headscale users create admin`
+
+**在 headscale 容器内创建预授权密钥**
+user 1：归属用户 ID 为 1 的用户
+reusable：密钥可重复使用（多台设备都能用这个 key 接入）
+expiration 720h：有效期 720 小时（30 天）
+`docker exec headscale headscale preauthkeys create --user 1 --reusable --expiration 720h`
+
+**在 headscale 容器内，列出所有预授权密钥**
+`docker exec headscale headscale preauthkeys list`
+
+**在 headscale 容器内，列出全部用户**
+`docker exec headscale headscale users list`
+
+*保存好拿到用户admin的密钥*
+
+## 主机安装tailscale
+官网地址：`https://tailscale.com/download`
+前往官网下载对应的安装包，下载完成后进行安装即可
+
+**Windows系统**
+安装完成后，打开cmd命令行
+输入命令：`tailscale --version`
+返回tailscale的版本号即成功
+tailscale安装成功后不会在桌面显示快捷图标，使用搜索功能搜索tailscale找到该应用，手动创建快捷图标即可
+tailscale会默认添加到环境变量中
+
+**使用tailscale**
+_注意不要点击启动tailscale，否则默认连接官方服务器_
+用管理员模式打开命令行，输入命令：
+将你在服务器上保存好的密钥替换到命令中后执行：
+`tailscale up --login-server=https://hs.a-bluecake.cc --authkey=密钥 --accept-dns=false`
+
+**查看连接状态**
+tailscale status
+通过会显示局域网内： ip 主机名 用户 操作系统
+
+**断开连接**
+tailscale down
+
+**下次连接**
+tailscale up
+
+
+
+。">
 <meta property="og:title" content="部署headscale与tailscale组建局域网流程">
-<meta property="og:description" content="111。">
+<meta property="og:description" content="## headscale与tailscale
+headscale用于自建私有控制服务器，其兼容 Tailscale 协议，用于替代 Tailscale 官方的控制服务器
+你需要在一个拥有公网ip的服务器部署headscale
+
+tailscale 负责主机互相连接，搭成局域网
+
+**注：
+使用客户端接入服务器时，只能通过https服务器接入，
+为此，在服务器部署headscale服务时，需要为这个服务提供一个域名，
+用于签订证书，获得https地址**
+
+### 请使用大模型辅助安装
+_全流程较复杂，建议使用agent助手进行辅助安装，
+将下方流程发给你的agent作为参考即可_
+手动安装请查询大模型各种配置文件写法
+
+## 服务器部署headscale
+**部署过程需要使用ngnix和docker，确保你已经安装好了这两个应用**
+
+### 1、使用docker部署headscale
+
+**目录结构准备：**
+选择一个合适的工作目录，新建文件docker-compose.yml
+在同目录下创建lib文件夹和config文件夹，config文件夹下新建文件config.yml
+lib文件夹用于存放headscale 的**数据持久化目录**
+config文件夹用于存放headscale的配置
+
+**编写配置文件：**
+编写当前目录下docker-compose.yml
+在config目录下编写config.yml
+
+**使用docker部署：**
+切换到docker-compose.yml所在目录，
+docker compose up -d  命令进行安装
+docker compose ps  查看状态
+
+通过IP加端口号（或域名）可以访问到你的服务即成功
+
+### 2、使用ngnix进行反向代理并配置证书
+**ngnix进行反向代理**
+编写ngnix的配置文件即可
+
+**配置证书**
+推荐下载 acme.sh 脚本，签发证书后，在ngnix配置中添加证书位置
+详细过程请查询相关命令
+
+**验证**
+浏览器访问你的域名，查看是否成功代理到你的headscale服务
+
+### 3、使用headscale
+docker exec headscale的意思是执行docker里面headsacle程序中的命令
+**创建admin用户**
+`docker exec headscale headscale users create admin`
+
+**在 headscale 容器内创建预授权密钥**
+user 1：归属用户 ID 为 1 的用户
+reusable：密钥可重复使用（多台设备都能用这个 key 接入）
+expiration 720h：有效期 720 小时（30 天）
+`docker exec headscale headscale preauthkeys create --user 1 --reusable --expiration 720h`
+
+**在 headscale 容器内，列出所有预授权密钥**
+`docker exec headscale headscale preauthkeys list`
+
+**在 headscale 容器内，列出全部用户**
+`docker exec headscale headscale users list`
+
+*保存好拿到用户admin的密钥*
+
+## 主机安装tailscale
+官网地址：`https://tailscale.com/download`
+前往官网下载对应的安装包，下载完成后进行安装即可
+
+**Windows系统**
+安装完成后，打开cmd命令行
+输入命令：`tailscale --version`
+返回tailscale的版本号即成功
+tailscale安装成功后不会在桌面显示快捷图标，使用搜索功能搜索tailscale找到该应用，手动创建快捷图标即可
+tailscale会默认添加到环境变量中
+
+**使用tailscale**
+_注意不要点击启动tailscale，否则默认连接官方服务器_
+用管理员模式打开命令行，输入命令：
+将你在服务器上保存好的密钥替换到命令中后执行：
+`tailscale up --login-server=https://hs.a-bluecake.cc --authkey=密钥 --accept-dns=false`
+
+**查看连接状态**
+tailscale status
+通过会显示局域网内： ip 主机名 用户 操作系统
+
+**断开连接**
+tailscale down
+
+**下次连接**
+tailscale up
+
+
+
+。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://a-bluecake.github.io/post/bu-shu-headscale-yu-tailscale-zu-jian-ju-yu-wang-liu-cheng.html">
 <meta property="og:image" content="https://avatars.githubusercontent.com/u/294737986?v=4&size=64">
@@ -73,7 +267,77 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 </div>
 </div>
     <div id="content">
-<div class="markdown-body" id="postBody"><p>111</p></div>
+<div class="markdown-body" id="postBody"><h2>headscale与tailscale</h2>
+<p>headscale用于自建私有控制服务器，其兼容 Tailscale 协议，用于替代 Tailscale 官方的控制服务器<br>
+你需要在一个拥有公网ip的服务器部署headscale</p>
+<p>tailscale 负责主机互相连接，搭成局域网</p>
+<p><strong>注：<br>
+使用客户端接入服务器时，只能通过https服务器接入，<br>
+为此，在服务器部署headscale服务时，需要为这个服务提供一个域名，<br>
+用于签订证书，获得https地址</strong></p>
+<h3>请使用大模型辅助安装</h3>
+<p><em>全流程较复杂，建议使用agent助手进行辅助安装，<br>
+将下方流程发给你的agent作为参考即可</em><br>
+手动安装请查询大模型各种配置文件写法</p>
+<h2>服务器部署headscale</h2>
+<p><strong>部署过程需要使用ngnix和docker，确保你已经安装好了这两个应用</strong></p>
+<h3>1、使用docker部署headscale</h3>
+<p><strong>目录结构准备：</strong><br>
+选择一个合适的工作目录，新建文件docker-compose.yml<br>
+在同目录下创建lib文件夹和config文件夹，config文件夹下新建文件config.yml<br>
+lib文件夹用于存放headscale 的<strong>数据持久化目录</strong><br>
+config文件夹用于存放headscale的配置</p>
+<p><strong>编写配置文件：</strong><br>
+编写当前目录下docker-compose.yml<br>
+在config目录下编写config.yml</p>
+<p><strong>使用docker部署：</strong><br>
+切换到docker-compose.yml所在目录，<br>
+docker compose up -d  命令进行安装<br>
+docker compose ps  查看状态</p>
+<p>通过IP加端口号（或域名）可以访问到你的服务即成功</p>
+<h3>2、使用ngnix进行反向代理并配置证书</h3>
+<p><strong>ngnix进行反向代理</strong><br>
+编写ngnix的配置文件即可</p>
+<p><strong>配置证书</strong><br>
+推荐下载 acme.sh 脚本，签发证书后，在ngnix配置中添加证书位置<br>
+详细过程请查询相关命令</p>
+<p><strong>验证</strong><br>
+浏览器访问你的域名，查看是否成功代理到你的headscale服务</p>
+<h3>3、使用headscale</h3>
+<p>docker exec headscale的意思是执行docker里面headsacle程序中的命令<br>
+<strong>创建admin用户</strong><br>
+<code class="notranslate">docker exec headscale headscale users create admin</code></p>
+<p><strong>在 headscale 容器内创建预授权密钥</strong><br>
+user 1：归属用户 ID 为 1 的用户<br>
+reusable：密钥可重复使用（多台设备都能用这个 key 接入）<br>
+expiration 720h：有效期 720 小时（30 天）<br>
+<code class="notranslate">docker exec headscale headscale preauthkeys create --user 1 --reusable --expiration 720h</code></p>
+<p><strong>在 headscale 容器内，列出所有预授权密钥</strong><br>
+<code class="notranslate">docker exec headscale headscale preauthkeys list</code></p>
+<p><strong>在 headscale 容器内，列出全部用户</strong><br>
+<code class="notranslate">docker exec headscale headscale users list</code></p>
+<p><em>保存好拿到用户admin的密钥</em></p>
+<h2>主机安装tailscale</h2>
+<p>官网地址：<code class="notranslate">https://tailscale.com/download</code><br>
+前往官网下载对应的安装包，下载完成后进行安装即可</p>
+<p><strong>Windows系统</strong><br>
+安装完成后，打开cmd命令行<br>
+输入命令：<code class="notranslate">tailscale --version</code><br>
+返回tailscale的版本号即成功<br>
+tailscale安装成功后不会在桌面显示快捷图标，使用搜索功能搜索tailscale找到该应用，手动创建快捷图标即可<br>
+tailscale会默认添加到环境变量中</p>
+<p><strong>使用tailscale</strong><br>
+<em>注意不要点击启动tailscale，否则默认连接官方服务器</em><br>
+用管理员模式打开命令行，输入命令：<br>
+将你在服务器上保存好的密钥替换到命令中后执行：<br>
+<code class="notranslate">tailscale up --login-server=https://hs.a-bluecake.cc --authkey=密钥 --accept-dns=false</code></p>
+<p><strong>查看连接状态</strong><br>
+tailscale status<br>
+通过会显示局域网内： ip 主机名 用户 操作系统</p>
+<p><strong>断开连接</strong><br>
+tailscale down</p>
+<p><strong>下次连接</strong><br>
+tailscale up</p></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
