@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>a-bluecake的博客</title><link>https://a-bluecake.github.io</link><description>你好，我是a-bluecake，分享计算机相关知识</description><copyright>a-bluecake的博客</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/294737986?v=4&amp;size=64</url><title>avatar</title><link>https://a-bluecake.github.io</link></image><lastBuildDate>Mon, 02 Nov 2026 09:43:28 +0000</lastBuildDate><managingEditor>a-bluecake的博客</managingEditor><ttl>60</ttl><webMaster>a-bluecake的博客</webMaster><item><title>部署headscale与tailscale组建局域网流程</title><link>https://a-bluecake.github.io/post/bu-shu-headscale-yu-tailscale-zu-jian-ju-yu-wang-liu-cheng.html</link><description>## headscale与tailscale
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>a-bluecake的博客</title><link>https://a-bluecake.github.io</link><description>你好，我是a-bluecake，分享计算机相关知识</description><copyright>a-bluecake的博客</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/294737986?v=4&amp;size=64</url><title>avatar</title><link>https://a-bluecake.github.io</link></image><lastBuildDate>Mon, 02 Nov 2026 23:18:46 +0000</lastBuildDate><managingEditor>a-bluecake的博客</managingEditor><ttl>60</ttl><webMaster>a-bluecake的博客</webMaster><item><title>部署headscale与tailscale组建局域网流程</title><link>https://a-bluecake.github.io/post/bu-shu-headscale-yu-tailscale-zu-jian-ju-yu-wang-liu-cheng.html</link><description>## headscale与tailscale
 headscale用于自建私有控制服务器，其兼容 Tailscale 协议，用于替代 Tailscale 官方的控制服务器
 你需要在一个拥有公网ip的服务器部署headscale
 
@@ -96,7 +96,22 @@ tailscale up
 
 
 
-。</description><guid isPermaLink="true">https://a-bluecake.github.io/post/bu-shu-headscale-yu-tailscale-zu-jian-ju-yu-wang-liu-cheng.html</guid><pubDate>Mon, 02 Nov 2026 08:36:33 +0000</pubDate></item><item><title>claude-CLI-配置-连接第三方key</title><link>https://a-bluecake.github.io/post/claude-CLI--pei-zhi---lian-jie-di-san-fang-key.html</link><description>## claude配置文件位置
+。</description><guid isPermaLink="true">https://a-bluecake.github.io/post/bu-shu-headscale-yu-tailscale-zu-jian-ju-yu-wang-liu-cheng.html</guid><pubDate>Mon, 02 Nov 2026 08:36:33 +0000</pubDate></item><item><title>养鱼：理解deepseek连接qq流程（未完结）</title><link>https://a-bluecake.github.io/post/yang-yu-%EF%BC%9A-li-jie-deepseek-lian-jie-qq-liu-cheng-%EF%BC%88-wei-wan-jie-%EF%BC%89.html</link><description>目前主流的养鱼过程，整个过程主要可以分为三个层级：
+大模型
+辅助插件(Harness)
+连接qq的应用
+
+首先理解三个层级的功能
+大模型：
+用来回答问题，其核心是一串API密钥，调用官方的api接口
+使用大模型是基本的功能，大部分软件都能轻易做到，不再详述
+
+辅助插件：
+将大模型变成鱼，核心是 人格与记忆，人格与记忆实现将大模型拟人化，
+同时一些辅助功能也通过添加插件实现，常见的是实现输出语音与图片，以及查看相关运行日志、控制鱼的行为习惯
+
+连接qq的应用：
+提供一个ws服务端，用作连接的中间件。</description><guid isPermaLink="true">https://a-bluecake.github.io/post/yang-yu-%EF%BC%9A-li-jie-deepseek-lian-jie-qq-liu-cheng-%EF%BC%88-wei-wan-jie-%EF%BC%89.html</guid><pubDate>Thu, 29 Oct 2026 16:00:06 +0000</pubDate></item><item><title>claude-CLI-配置-连接第三方key</title><link>https://a-bluecake.github.io/post/claude-CLI--pei-zhi---lian-jie-di-san-fang-key.html</link><description>## claude配置文件位置
 **通过claude.exe程序运行claude**
 _建议将claude.exe所在目录加入环境变量path，方便命令行启动claude_
 
