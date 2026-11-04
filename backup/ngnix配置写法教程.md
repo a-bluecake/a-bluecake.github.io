@@ -1,4 +1,73 @@
 ngnix是一款代理服务器软件，主要托管用户的web端80、443端口
 是目前主流最常用的服务器软件
+本文通过从简单到复杂的方式，一步步教会读者怎么写nginx配置
+
+## nginx的语法
+nginx语法很简单，通常不需要额外的字符，使用空格分割命令和参数
+一般来说，只需要记住以下三点：
+普通行以 ; 结尾，
+块 {} 结尾不需要任何字符,
+**#** 是注释符号
+
+## nginx代理转发请求简单关键字：
+server 定义一个服务块
+listen 定义服务块监听的端口号
+server_name 定义服务块监听的域名
+location 匹配路由（即请求参url的拼接地址）
+proxy_pass 向后端真实服务发送请求
+
+由这些关键字可以写出一个极简单的配置：
+server {
+  listen 80;
+  server_name a-bluecake.cc; "#这里写请求传入的域名"
+  location / {
+    proxy_pass http://127.0.0.1:8080;
+  }
+}
+意思是监听a-bluecake.cc域名的80端口收到的请求，并将其转发给本机8080端口服务
+
+## location匹配路由功能
+在上面配置的基础上，可以写：
+server {
+  listen 80;
+  server_name a-bluecake.cc; "#这里写请求传入的域名"
+  location /users {
+    proxy_pass http://127.0.0.1:8080;
+  }
+  location /mysql {
+    proxy_pass http://127.0.0.1:3306;
+  }
+}
+这样一来，
+用户访问 http://a-bluecake.cc:80/mysql 或 http://a-bluecake.cc:80/users 时，将转发给不同的服务
+由此可见，location负责匹配用户的访问路径，进行不同的操作
+
+（注：浏览器默认http使用80端口，常写法是http://a-bluecake.cc/mysql ，不显示写上 :80 ，结果基本一致）
+
+## nginx静态资源模式
+关键字：root  index
+root 的作用是确定访问文件的路径
+index 用于匹配访问文件的名称
+以如下配置举例：
+server {
+  listen 80;
+  server_name a-bluecake.cc; "#这里写请求传入的域名"
+  location / {
+    root /opt/common
+    index index.html error.html
+  }
+}
+当用户访问 http://a-bluecake.cc/ , 服务器将在/opt/commom目录下寻找文件，找到index.html文件则返回 ，
+找不到时其次寻找error.html文件并返回，如果都找不到则报错
+
+## nginx 设置代理请求头
+
+
+
+
+
+
+
+
 
 
