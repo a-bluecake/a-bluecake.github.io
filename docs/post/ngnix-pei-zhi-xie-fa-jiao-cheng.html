@@ -68,12 +68,12 @@ server {
   listen 80;
   server_name a-bluecake.cc; '#这里写请求传入的域名'
   location /index {
-    root /opt/common
-    index index.html error.html
+    root /opt/common;
+    index index.html error.html;
   }
   location /a {
-    alias /opt
-    index index.html error.html
+    alias /opt/;
+    index index.html error.html;
   }  
 }
 当用户访问 http://a-bluecake.cc/index , 服务器将在/opt/commom/index目录下寻找文件，找到index.html文件则返回 ，
@@ -166,12 +166,12 @@ server {
   listen 80;
   server_name a-bluecake.cc; '#这里写请求传入的域名'
   location /index {
-    root /opt/common
-    index index.html error.html
+    root /opt/common;
+    index index.html error.html;
   }
   location /a {
-    alias /opt
-    index index.html error.html
+    alias /opt/;
+    index index.html error.html;
   }  
 }
 当用户访问 http://a-bluecake.cc/index , 服务器将在/opt/commom/index目录下寻找文件，找到index.html文件则返回 ，
@@ -317,12 +317,12 @@ server {<br>
 listen 80;<br>
 server_name a-bluecake.cc; "#这里写请求传入的域名"<br>
 location /index {<br>
-root /opt/common<br>
-index index.html error.html<br>
+root /opt/common;<br>
+index index.html error.html;<br>
 }<br>
 location /a {<br>
-alias /opt<br>
-index index.html error.html<br>
+alias /opt/;<br>
+index index.html error.html;<br>
 }<br>
 }<br>
 当用户访问 <a href="http://a-bluecake.cc/index" rel="nofollow">http://a-bluecake.cc/index</a> , 服务器将在/opt/commom/index目录下寻找文件，找到index.html文件则返回 ，<br>

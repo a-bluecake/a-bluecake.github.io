@@ -56,12 +56,12 @@ server {
   listen 80;
   server_name a-bluecake.cc; "#这里写请求传入的域名"
   location /index {
-    root /opt/common
-    index index.html error.html
+    root /opt/common;
+    index index.html error.html;
   }
   location /a {
-    alias /opt
-    index index.html error.html
+    alias /opt/;
+    index index.html error.html;
   }  
 }
 当用户访问 http://a-bluecake.cc/index , 服务器将在/opt/commom/index目录下寻找文件，找到index.html文件则返回 ，
