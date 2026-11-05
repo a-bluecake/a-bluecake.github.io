@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>a-bluecake的博客</title><link>https://a-bluecake.github.io</link><description>你好，我是a-bluecake，分享计算机相关知识</description><copyright>a-bluecake的博客</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/294737986?v=4&amp;size=64</url><title>avatar</title><link>https://a-bluecake.github.io</link></image><lastBuildDate>Thu, 05 Nov 2026 06:13:19 +0000</lastBuildDate><managingEditor>a-bluecake的博客</managingEditor><ttl>60</ttl><webMaster>a-bluecake的博客</webMaster><item><title>ngnix配置写法教程</title><link>https://a-bluecake.github.io/post/ngnix-pei-zhi-xie-fa-jiao-cheng.html</link><description>ngnix是一款代理服务器软件，主要托管用户的web端80、443端口
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>a-bluecake的博客</title><link>https://a-bluecake.github.io</link><description>你好，我是a-bluecake，分享计算机相关知识</description><copyright>a-bluecake的博客</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/294737986?v=4&amp;size=64</url><title>avatar</title><link>https://a-bluecake.github.io</link></image><lastBuildDate>Thu, 05 Nov 2026 06:59:31 +0000</lastBuildDate><managingEditor>a-bluecake的博客</managingEditor><ttl>60</ttl><webMaster>a-bluecake的博客</webMaster><item><title>ngnix配置写法教程</title><link>https://a-bluecake.github.io/post/ngnix-pei-zhi-xie-fa-jiao-cheng.html</link><description>ngnix是一款代理服务器软件，主要托管用户的web端80、443端口
 是目前主流最常用的服务器软件
 本文通过从简单到复杂的方式，一步步教会读者怎么写nginx配置
 
@@ -86,6 +86,35 @@ server {
 访问者IP：$remote_addr 或 $proxy_add_x_forwarded_for
 访问者访问的域名： $host
 访问者访问的端口号：$server_port
+
+关键字：
+proxy_set_header 设置请求头参数
+
+server {
+  listen 80;
+  server_name a-bluecake.cc; '#这里写请求传入的域名'
+  location / {
+    proxy_pass http://127.0.0.1:8080;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Photo $scheme;
+    proxy_set_header X-Real-IP $remote_addr;
+  }
+}
+后端收到的请求里则带有这些写好的请求体参数
+
+设置nginx与后端服务的连接等待时间（写在location的操作块内，不写则默认为60秒）：
+ proxy_connect_timeout 60s  tcp连接需要在60秒内完成
+ proxy_read_timeout 60s 后端60秒未响应则断开
+ proxy_send_timeout 60s 前端发送数据卡住60秒则断开
+
+## nginx 配置https
+网站可能需要使用https安全访问，则nginx需要配置监听443端口，
+原80端口的服务交付443端口处理，此时原80端口用于配置续签证书和转发请求到443端口
+
+https访问的前提是配置好证书：
+
+
+
 
 
 

@@ -86,6 +86,35 @@ server {
 访问者访问的域名： $host
 访问者访问的端口号：$server_port
 
+关键字：
+proxy_set_header 设置请求头参数
+
+server {
+  listen 80;
+  server_name a-bluecake.cc; "#这里写请求传入的域名"
+  location / {
+    proxy_pass http://127.0.0.1:8080;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Photo $scheme;
+    proxy_set_header X-Real-IP $remote_addr;
+  }
+}
+后端收到的请求里则带有这些写好的请求体参数
+
+设置nginx与后端服务的连接等待时间（写在location的操作块内，不写则默认为60秒）：
+ proxy_connect_timeout 60s  tcp连接需要在60秒内完成
+ proxy_read_timeout 60s 后端60秒未响应则断开
+ proxy_send_timeout 60s 前端发送数据卡住60秒则断开
+
+## nginx 配置https
+网站可能需要使用https安全访问，则nginx需要配置监听443端口，
+原80端口的服务交付443端口处理，此时原80端口用于配置续签证书和转发请求到443端口
+
+https访问的前提是配置好证书：
+
+
+
+
 
 
 
