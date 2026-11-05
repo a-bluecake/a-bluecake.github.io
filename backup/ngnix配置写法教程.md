@@ -110,14 +110,31 @@ server {
 网站可能需要使用https安全访问，则nginx需要配置监听443端口，
 原80端口的服务交付443端口处理，此时原80端口用于配置续签证书和转发请求到443端口
 
+### 签发证书
 https访问的前提是配置好证书：
-
-
-
-
-
-
-
+ACME协议（自动化证书管理环境）：客户端与CA的交流协议
+CA：证书颁发机构
+CA有多个，这里介绍Let's Encrypt ，它是一个免费的CA
+Let's Encrypt 有着封装好申请证书过程命令的客户端工具 ：certbot / acme.sh
+过程详解：
+1、本地生成密钥对
+本地使用密钥生成工具生成一对密钥，作为账户密钥
+2、注册账号
+向Let's Encrypt 指定的url地址发送post请求，携带符合要求的payload，该请求用私钥加密，同时公钥在请求中传给Let's Encrypt，即完成注册
+Let's Encrypt 会返回一个url地址，之后请求会在头部带上这个地址，Let's Encrypt 验证存在账号后，允许使用各种服务
+3、验证域名属于本人
+向Let's Encrypt 发送请求，签一张证书，请求体内带上自己的域名
+Let's Encrypt进行验证，最常见的验证方式是：
+在 http://域名/.well-known/acme-challenge/<token> 放指定内容：
+    1、Let's Encrypt生成一个随机token，传给客户端
+    2、客户端创建一个文本文件，文件名为<token>，位于/.well-known/acme-challenge/目录下，文件内容包含token 和 账户公钥
+    3、完成后，向Let's Encrypt 发送请求，通知其开始验证
+    4、验证到存在该文件并符合要求，Let's Encrypt将该账户此域名的签发证书状态改为同意
+4、申请签发证书
+本地使用密钥生成工具再生成一对密钥，作为证书密钥
+向Let's Encrypt发送CSR请求，CSR中包含了申请域名与证书公钥，用证书私钥签名
+Let's Encrypt检查域名，检查签名与公钥是否匹配，确定后生成证书，有效期为90天
+服务器向Let's Encrypt申请下载证书
 
 
 
