@@ -47,21 +47,27 @@ server {
 （注：浏览器默认http使用80端口，常写法是http://a-bluecake.cc/mysql ，不显示写上 :80 ，结果基本一致）
 
 ## nginx静态资源模式
-关键字：root  index
-root 的作用是确定访问文件的路径
+关键字：alias root  index
+alias 的作用是注明访问文件的路径
+root 的作用是标注位置作为访问文件的根路径
 index 用于匹配访问文件的名称
 以如下配置举例：
 server {
   listen 80;
   server_name a-bluecake.cc; "#这里写请求传入的域名"
-  location / {
+  location /index {
     root /opt/common
     index index.html error.html
   }
+  location /a {
+    alias /opt
+    index index.html error.html
+  }  
 }
-当用户访问 http://a-bluecake.cc/ , 服务器将在/opt/commom目录下寻找文件，找到index.html文件则返回 ，
+当用户访问 http://a-bluecake.cc/index , 服务器将在/opt/commom/index目录下寻找文件，找到index.html文件则返回 ，
 找不到时其次寻找error.html文件并返回，如果都找不到则报错
-
+当用户访问 http://a-bluecake.cc/a , 服务器将在/opt目录下寻找文件，找到index.html文件则返回 ，
+找不到时其次寻找error.html文件并返回，如果都找不到则报错
 
 # nginx进阶语法
 ## nginx 设置代理请求头
