@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>a-bluecake的博客</title><link>https://a-bluecake.github.io</link><description>你好，我是a-bluecake，分享计算机相关知识</description><copyright>a-bluecake的博客</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/294737986?v=4&amp;size=64</url><title>avatar</title><link>https://a-bluecake.github.io</link></image><lastBuildDate>Thu, 05 Nov 2026 07:43:05 +0000</lastBuildDate><managingEditor>a-bluecake的博客</managingEditor><ttl>60</ttl><webMaster>a-bluecake的博客</webMaster><item><title>ngnix配置写法教程</title><link>https://a-bluecake.github.io/post/ngnix-pei-zhi-xie-fa-jiao-cheng.html</link><description>ngnix是一款代理服务器软件，主要托管用户的web端80、443端口
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>a-bluecake的博客</title><link>https://a-bluecake.github.io</link><description>你好，我是a-bluecake，分享计算机相关知识</description><copyright>a-bluecake的博客</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/294737986?v=4&amp;size=64</url><title>avatar</title><link>https://a-bluecake.github.io</link></image><lastBuildDate>Thu, 05 Nov 2026 08:00:19 +0000</lastBuildDate><managingEditor>a-bluecake的博客</managingEditor><ttl>60</ttl><webMaster>a-bluecake的博客</webMaster><item><title>ngnix配置写法教程</title><link>https://a-bluecake.github.io/post/ngnix-pei-zhi-xie-fa-jiao-cheng.html</link><description>ngnix是一款代理服务器软件，主要托管用户的web端80、443端口
 是目前主流最常用的服务器软件
 本文通过从简单到复杂的方式，一步步教会读者怎么写nginx配置
 
@@ -132,10 +132,12 @@ Let's Encrypt进行验证，最常见的验证方式是：
     3、完成后，向Let's Encrypt 发送请求，通知其开始验证
     4、验证到存在该文件并符合要求，Let's Encrypt将该账户此域名的签发证书状态改为同意
 4、申请签发证书
-本地使用密钥生成工具再生成一对密钥，作为证书密钥
+本地再次使用密钥生成工具生成一对密钥，作为证书密钥
 向Let's Encrypt发送CSR请求，CSR中包含了申请域名与证书公钥，用证书私钥签名
-Let's Encrypt检查域名，检查签名与公钥是否匹配，确定后生成证书，有效期为90天
+Let's Encrypt检查域名，检查签名与公钥是否匹配，确定后生成证书，证书保存了CA公钥并用CA私钥签名，有效期为90天
 服务器向Let's Encrypt申请下载证书
+
+
 
 
 
