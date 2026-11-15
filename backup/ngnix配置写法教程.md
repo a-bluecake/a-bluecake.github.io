@@ -188,8 +188,62 @@ server {
     }
 }
 
+### nginx 443端写法
+443端需要另写一个server处理
+https使用ssl（tls）握手，需要配置ssl处理
+ssl on; 开启ssl，现在通常使用 listen ssl; 的简化写法
+ssl_certificate   签发证书的地址
+ssl_certificate_key  服务器私钥的地址
 
+server {
+    listen 443 ssl;
+    server_name a-bluecake.cc;
 
+    ssl_certificate      /xxx/fullchain.pem; 
+    ssl_certificate_key  /xxx/privkey.pem;  
+
+    location /api {
+        proxy_pass 127.0.0.1:8080;
+    }
+}
+
+### 完整申请证书与nginx配置示范
+
+使用acme.sh申请证书：
+
+下载安装acme.sh脚本
+curl -L https://get.acme.sh -o get-acme.sh
+
+执行完该命令后，工作目录下获得一个文件get-acme.sh
+执行该文件
+sh get-acme.sh
+
+脚本会自动安装好acme.sh客户端
+安装完成后，刷新环境变量
+source ~/.bashrc
+
+验证是否成功安装，如果输出版本号则安装成功
+acme.sh --version
+
+切换CA服务商为Let's Encrypt
+acme.sh --set-default-ca --server letsencrypt
+
+申请证书：
+nginx需提取配置好CA访问路径，例：
+server {
+    listen 80;
+    server_name a-bluecake.cc;
+    location /.well-known/acme-challenge/ {
+        root /ca;
+        try_files $uri =404;
+    }
+}
+申请证书命令
+`acme.sh --issue -d a-bluecake.cc --webroot /ca`
+--issue表示申请证书
+-d 后参数表示申请域名，可以为多个域名申请同一个证书
+--webroot 后参数表示文件根路径，与nginx里面的root的路径需要一致
+acme.sh会在目的地址临时生成文件，通过验证后自动删除
 
 
 

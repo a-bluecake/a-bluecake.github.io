@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>a-bluecake的博客</title><link>https://a-bluecake.github.io</link><description>你好，我是a-bluecake，分享计算机相关知识</description><copyright>a-bluecake的博客</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/294737986?v=4&amp;size=64</url><title>avatar</title><link>https://a-bluecake.github.io</link></image><lastBuildDate>Sun, 15 Nov 2026 15:18:52 +0000</lastBuildDate><managingEditor>a-bluecake的博客</managingEditor><ttl>60</ttl><webMaster>a-bluecake的博客</webMaster><item><title>ngnix配置写法教程</title><link>https://a-bluecake.github.io/post/ngnix-pei-zhi-xie-fa-jiao-cheng.html</link><description>ngnix是一款代理服务器软件，主要托管用户的web端80、443端口
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>a-bluecake的博客</title><link>https://a-bluecake.github.io</link><description>你好，我是a-bluecake，分享计算机相关知识</description><copyright>a-bluecake的博客</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://avatars.githubusercontent.com/u/294737986?v=4&amp;size=64</url><title>avatar</title><link>https://a-bluecake.github.io</link></image><lastBuildDate>Sun, 15 Nov 2026 16:00:40 +0000</lastBuildDate><managingEditor>a-bluecake的博客</managingEditor><ttl>60</ttl><webMaster>a-bluecake的博客</webMaster><item><title>ngnix配置写法教程</title><link>https://a-bluecake.github.io/post/ngnix-pei-zhi-xie-fa-jiao-cheng.html</link><description>ngnix是一款代理服务器软件，主要托管用户的web端80、443端口
 是目前主流最常用的服务器软件
 本文通过从简单到复杂的方式，一步步教会读者怎么写nginx配置
 
@@ -189,8 +189,62 @@ server {
     }
 }
 
+### nginx 443端写法
+443端需要另写一个server处理
+https使用ssl（tls）握手，需要配置ssl处理
+ssl on; 开启ssl，现在通常使用 listen ssl; 的简化写法
+ssl_certificate   签发证书的地址
+ssl_certificate_key  服务器私钥的地址
 
+server {
+    listen 443 ssl;
+    server_name a-bluecake.cc;
 
+    ssl_certificate      /xxx/fullchain.pem; 
+    ssl_certificate_key  /xxx/privkey.pem;  
+
+    location /api {
+        proxy_pass 127.0.0.1:8080;
+    }
+}
+
+### 完整申请证书与nginx配置示范
+
+使用acme.sh申请证书：
+
+下载安装acme.sh脚本
+curl -L https://get.acme.sh -o get-acme.sh
+
+执行完该命令后，工作目录下获得一个文件get-acme.sh
+执行该文件
+sh get-acme.sh
+
+脚本会自动安装好acme.sh客户端
+安装完成后，刷新环境变量
+source ~/.bashrc
+
+验证是否成功安装，如果输出版本号则安装成功
+acme.sh --version
+
+切换CA服务商为Let's Encrypt
+acme.sh --set-default-ca --server letsencrypt
+
+申请证书：
+nginx需提取配置好CA访问路径，例：
+server {
+    listen 80;
+    server_name a-bluecake.cc;
+    location /.well-known/acme-challenge/ {
+        root /ca;
+        try_files $uri =404;
+    }
+}
+申请证书命令
+`acme.sh --issue -d a-bluecake.cc --webroot /ca`
+--issue表示申请证书
+-d 后参数表示申请域名，可以为多个域名申请同一个证书
+--webroot 后参数表示文件根路径，与nginx里面的root的路径需要一致
+acme.sh会在目的地址临时生成文件，通过验证后自动删除
 
 
 
