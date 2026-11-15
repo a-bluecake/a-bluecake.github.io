@@ -42,6 +42,7 @@ server {
 
 ## location匹配路由功能
 在上面配置的基础上，可以写：
+```
 server {
   listen 80;
   server_name a-bluecake.cc; '#这里写请求传入的域名'
@@ -52,6 +53,7 @@ server {
     proxy_pass http://127.0.0.1:3306;
   }
 }
+```
 这样一来，
 用户访问 http://a-bluecake.cc:80/mysql 或 http://a-bluecake.cc:80/users 时，将转发给不同的服务
 由此可见，location负责匹配用户的访问路径，进行不同的操作
@@ -339,6 +341,7 @@ server {
 
 ## location匹配路由功能
 在上面配置的基础上，可以写：
+```
 server {
   listen 80;
   server_name a-bluecake.cc; '#这里写请求传入的域名'
@@ -349,6 +352,7 @@ server {
     proxy_pass http://127.0.0.1:3306;
   }
 }
+```
 这样一来，
 用户访问 http://a-bluecake.cc:80/mysql 或 http://a-bluecake.cc:80/users 时，将转发给不同的服务
 由此可见，location负责匹配用户的访问路径，进行不同的操作
@@ -700,18 +704,19 @@ proxy_pass <a href="http://127.0.0.1:8080" rel="nofollow">http://127.0.0.1:8080<
 }<br>
 意思是监听a-bluecake.cc域名的80端口收到的请求，并将其转发给本机8080端口服务</p>
 <h2>location匹配路由功能</h2>
-<p>在上面配置的基础上，可以写：<br>
-server {<br>
-listen 80;<br>
-server_name a-bluecake.cc; "#这里写请求传入的域名"<br>
-location /users {<br>
-proxy_pass <a href="http://127.0.0.1:8080" rel="nofollow">http://127.0.0.1:8080</a>;<br>
-}<br>
-location /mysql {<br>
-proxy_pass <a href="http://127.0.0.1:3306" rel="nofollow">http://127.0.0.1:3306</a>;<br>
-}<br>
-}<br>
-这样一来，<br>
+<p>在上面配置的基础上，可以写：</p>
+<pre class="notranslate"><code class="notranslate">server {
+  listen 80;
+  server_name a-bluecake.cc; "#这里写请求传入的域名"
+  location /users {
+    proxy_pass http://127.0.0.1:8080;
+  }
+  location /mysql {
+    proxy_pass http://127.0.0.1:3306;
+  }
+}
+</code></pre>
+<p>这样一来，<br>
 用户访问 <a href="http://a-bluecake.cc:80/mysql" rel="nofollow">http://a-bluecake.cc:80/mysql</a> 或 <a href="http://a-bluecake.cc:80/users" rel="nofollow">http://a-bluecake.cc:80/users</a> 时，将转发给不同的服务<br>
 由此可见，location负责匹配用户的访问路径，进行不同的操作</p>
 <p>（注：浏览器默认http使用80端口，常写法是<a href="http://a-bluecake.cc/mysql" rel="nofollow">http://a-bluecake.cc/mysql</a> ，不显示写上 :80 ，结果基本一致）</p>

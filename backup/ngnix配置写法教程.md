@@ -30,6 +30,7 @@ server {
 
 ## location匹配路由功能
 在上面配置的基础上，可以写：
+```
 server {
   listen 80;
   server_name a-bluecake.cc; "#这里写请求传入的域名"
@@ -40,6 +41,7 @@ server {
     proxy_pass http://127.0.0.1:3306;
   }
 }
+```
 这样一来，
 用户访问 http://a-bluecake.cc:80/mysql 或 http://a-bluecake.cc:80/users 时，将转发给不同的服务
 由此可见，location负责匹配用户的访问路径，进行不同的操作
