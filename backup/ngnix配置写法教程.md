@@ -239,11 +239,51 @@ server {
     }
 }
 申请证书命令
-`acme.sh --issue -d a-bluecake.cc --webroot /ca`
+`acme.sh --issue -d a-bluecake.cc --webroot /ca `
 --issue表示申请证书
 -d 后参数表示申请域名，可以为多个域名申请同一个证书
 --webroot 后参数表示文件根路径，与nginx里面的root的路径需要一致
 acme.sh会在目的地址临时生成文件，通过验证后自动删除
+acme.sh通常会自动在临期一个月时自动续签证书
+
+导出证书与服务器私钥
+建议在/ca目录下新建一个ssl文件夹，用于存放CA证书与服务器私钥
+acme.sh --install-cert -d a-bluecake.cc --key-file /ca/ssl/privkey.pem --fullchain-file /ca/ssl/fullchain.pem
+--install-cert 表示导出一份复制件，用于交付代理服务器
+-d 后参数表示目标域名
+--key-file 后参数表示私钥地址
+--fullchain-file 后参数表示证书地址
+
+将https加上后
+nginx完整配置
+```
+http {
+  server {
+    listen 80;
+    server_name a-bluecake.cc;
+    location /.well-known/acme-challenge/ {
+      root /ca;
+      try_files $uri =404;
+    } 
+    location / {
+      return 301 https://$host$request_uri;
+    }
+  }
+  server{
+    listen 443 ssl;
+    server_name a-bluecake.cc;
+    ssl_certificate /ca/ssl/fullchain.pem;
+    ssl_certificate_key /ca/ssl/privkey.pem;
+    location / {
+      proxy_pass 127.0.0.1:8080;
+      proxy_set_header Host $host;
+    }
+  }
+}
+```
+
+
+
 
 
 
