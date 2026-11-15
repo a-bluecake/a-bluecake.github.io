@@ -116,6 +116,7 @@ ACME协议（自动化证书管理环境）：客户端与CA的交流协议
 CA：证书颁发机构
 CA有多个，这里介绍Let's Encrypt ，它是一个免费的CA
 Let's Encrypt 有着封装好申请证书过程命令的客户端工具 ：certbot / acme.sh
+
 过程详解：
 1、本地生成密钥对
 本地使用密钥生成工具生成一对密钥，作为账户密钥
@@ -133,8 +134,62 @@ Let's Encrypt进行验证，最常见的验证方式是：
 4、申请签发证书
 本地再次使用密钥生成工具生成一对密钥，作为证书密钥
 向Let's Encrypt发送CSR请求，CSR中包含了申请域名与证书公钥，用证书私钥签名
-Let's Encrypt检查域名，检查签名与公钥是否匹配，确定后生成证书，证书保存了CA公钥并用CA私钥签名，有效期为90天
-服务器向Let's Encrypt申请下载证书
+Let's Encrypt检查域名，检查签名与公钥是否匹配，确定后生成证书，证书保存了服务器公钥并用CA私钥签名，有效期为90天
+服务器向Let's Encrypt申请下载证书，之后向客户端发送请求时附带证书，一般需要设置有效期过自动续签
+
+对于申请证书，只需了解如果使用申请证书工具即可
+
+### nginx配置申请证书
+
+nginx需要在80端口留下一个CA验证的路径，用于申请证书与续签
+关键路径：/.well-known/acme-challenge/
+最简单的写法：
+server {
+    listen 80;
+    server_name a-bluecake.cc;
+    location /.well-known/acme-challenge/ {
+        root /ca;
+    }
+}
+CA访问时，url是一个文件的地址，文件存在自动返回，使用root控制文件存放的根地址即可
+(这里注意虽然也是静态资源模式，但是不适用index匹配文件名)
+但是如果该路径不存在验证文件，该请求不会终止，建议加上终止
+关键字：try_files 匹配文件，区别于index，当访问路径是文件时也能生效
+参数: $uri  url的路径部分 , =404 返回404
+常见写法：
+server {
+    listen 80;
+    server_name a-bluecake.cc;
+    location /.well-known/acme-challenge/ {
+        root /ca;
+        try_files $uri =404;
+    }
+}
+寻找文件$uri ，找不到再返回 404，nginx在返回404时，就会终止匹配请求
+
+### nginx 80端写法
+80端只需要完成两个服务，提供证书验证路径，将转发进的请求重定向到443端口
+
+关键字 return 重定向：
+return 状态码 重定向地址
+通常301表示永久重定向，302表示临时重定向
+当执行return时，nginx会向浏览器返回状态码，同时返回重定向地址，浏览器用重定向地址再访问
+
+完整写法：
+server {
+    listen 80;
+    server_name a-bluecake.cc;
+    location /.well-known/acme-challenge/ {
+        root /ca;
+        try_files $uri =404;
+    }
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+
+
+
 
 
 
