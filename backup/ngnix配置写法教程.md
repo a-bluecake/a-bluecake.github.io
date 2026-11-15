@@ -1,4 +1,4 @@
-ngnix是一款代理服务器软件，主要托管用户的web端80、443端口
+ngnix是一款代理服务器软件，可以用于托管用户的web端，监听80、443端口
 是目前主流最常用的服务器软件
 本文通过从简单到复杂的方式，一步步教会读者怎么写nginx配置
 
@@ -27,6 +27,8 @@ server {
   }
 }
 意思是监听a-bluecake.cc域名的80端口收到的请求，并将其转发给本机8080端口服务
+假设用户访问 http://a-bluecake.cc/users/mysql
+nginx将转发请求到 http://127.0.0.1:8080/users/mysql
 
 ## location匹配路由功能
 在上面配置的基础上，可以写：
@@ -50,8 +52,8 @@ server {
 
 ## nginx静态资源模式
 关键字：alias root  index
-alias 的作用是注明访问文件的路径
-root 的作用是标注位置作为访问文件的根路径
+alias 的作用是注明访问文件的路径，替换location匹配的前缀
+root 的作用是标注位置作为访问文件的根路径,拼接完整url
 index 用于匹配访问文件的名称
 以如下配置举例：
 ```
@@ -68,7 +70,7 @@ server {
   }  
 }
 ```
-当用户访问 http://a-bluecake.cc/index , 服务器将在/opt/commom/index目录下寻找文件，找到index.html文件则返回 ，
+当用户访问 http://a-bluecake.cc/index , 服务器将在/opt/common/index目录下寻找文件，找到index.html文件则返回 ，
 找不到时其次寻找error.html文件并返回，如果都找不到则报错
 当用户访问 http://a-bluecake.cc/a , 服务器将在/opt目录下寻找文件，找到index.html文件则返回 ，
 找不到时其次寻找error.html文件并返回，如果都找不到则报错
@@ -99,7 +101,7 @@ server {
   location / {
     proxy_pass http://127.0.0.1:8080;
     proxy_set_header Host $host;
-    proxy_set_header X-Forwarded-Photo $scheme;
+    proxy_set_header X-Forwarded-Proto $scheme;
     proxy_set_header X-Real-IP $remote_addr;
   }
 }
@@ -207,7 +209,7 @@ server {
     ssl_certificate_key  /xxx/privkey.pem;  
 
     location /api {
-        proxy_pass 127.0.0.1:8080;
+        proxy_pass  http://127.0.0.1:8080;
     }
 }
 ```
@@ -279,7 +281,7 @@ http {
     ssl_certificate /ca/ssl/fullchain.pem;
     ssl_certificate_key /ca/ssl/privkey.pem;
     location / {
-      proxy_pass 127.0.0.1:8080;
+      proxy_pass http://127.0.0.1:8080;
       proxy_set_header Host $host;
     }
   }

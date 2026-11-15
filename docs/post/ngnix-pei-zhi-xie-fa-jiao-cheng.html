@@ -10,7 +10,7 @@
         let theme = localStorage.getItem("meek_theme") || "light";
         document.documentElement.setAttribute("data-color-mode", theme);
     </script>
-<meta name="description" content="ngnix是一款代理服务器软件，主要托管用户的web端80、443端口
+<meta name="description" content="ngnix是一款代理服务器软件，可以用于托管用户的web端，监听80、443端口
 是目前主流最常用的服务器软件
 本文通过从简单到复杂的方式，一步步教会读者怎么写nginx配置
 
@@ -39,6 +39,8 @@ server {
   }
 }
 意思是监听a-bluecake.cc域名的80端口收到的请求，并将其转发给本机8080端口服务
+假设用户访问 http://a-bluecake.cc/users/mysql
+nginx将转发请求到 http://127.0.0.1:8080/users/mysql
 
 ## location匹配路由功能
 在上面配置的基础上，可以写：
@@ -62,8 +64,8 @@ server {
 
 ## nginx静态资源模式
 关键字：alias root  index
-alias 的作用是注明访问文件的路径
-root 的作用是标注位置作为访问文件的根路径
+alias 的作用是注明访问文件的路径，替换location匹配的前缀
+root 的作用是标注位置作为访问文件的根路径,拼接完整url
 index 用于匹配访问文件的名称
 以如下配置举例：
 ```
@@ -80,7 +82,7 @@ server {
   }  
 }
 ```
-当用户访问 http://a-bluecake.cc/index , 服务器将在/opt/commom/index目录下寻找文件，找到index.html文件则返回 ，
+当用户访问 http://a-bluecake.cc/index , 服务器将在/opt/common/index目录下寻找文件，找到index.html文件则返回 ，
 找不到时其次寻找error.html文件并返回，如果都找不到则报错
 当用户访问 http://a-bluecake.cc/a , 服务器将在/opt目录下寻找文件，找到index.html文件则返回 ，
 找不到时其次寻找error.html文件并返回，如果都找不到则报错
@@ -111,7 +113,7 @@ server {
   location / {
     proxy_pass http://127.0.0.1:8080;
     proxy_set_header Host $host;
-    proxy_set_header X-Forwarded-Photo $scheme;
+    proxy_set_header X-Forwarded-Proto $scheme;
     proxy_set_header X-Real-IP $remote_addr;
   }
 }
@@ -219,7 +221,7 @@ server {
     ssl_certificate_key  /xxx/privkey.pem;  
 
     location /api {
-        proxy_pass 127.0.0.1:8080;
+        proxy_pass  http://127.0.0.1:8080;
     }
 }
 ```
@@ -291,7 +293,7 @@ http {
     ssl_certificate /ca/ssl/fullchain.pem;
     ssl_certificate_key /ca/ssl/privkey.pem;
     location / {
-      proxy_pass 127.0.0.1:8080;
+      proxy_pass http://127.0.0.1:8080;
       proxy_set_header Host $host;
     }
   }
@@ -309,7 +311,7 @@ http {
 
 。">
 <meta property="og:title" content="ngnix配置写法教程">
-<meta property="og:description" content="ngnix是一款代理服务器软件，主要托管用户的web端80、443端口
+<meta property="og:description" content="ngnix是一款代理服务器软件，可以用于托管用户的web端，监听80、443端口
 是目前主流最常用的服务器软件
 本文通过从简单到复杂的方式，一步步教会读者怎么写nginx配置
 
@@ -338,6 +340,8 @@ server {
   }
 }
 意思是监听a-bluecake.cc域名的80端口收到的请求，并将其转发给本机8080端口服务
+假设用户访问 http://a-bluecake.cc/users/mysql
+nginx将转发请求到 http://127.0.0.1:8080/users/mysql
 
 ## location匹配路由功能
 在上面配置的基础上，可以写：
@@ -361,8 +365,8 @@ server {
 
 ## nginx静态资源模式
 关键字：alias root  index
-alias 的作用是注明访问文件的路径
-root 的作用是标注位置作为访问文件的根路径
+alias 的作用是注明访问文件的路径，替换location匹配的前缀
+root 的作用是标注位置作为访问文件的根路径,拼接完整url
 index 用于匹配访问文件的名称
 以如下配置举例：
 ```
@@ -379,7 +383,7 @@ server {
   }  
 }
 ```
-当用户访问 http://a-bluecake.cc/index , 服务器将在/opt/commom/index目录下寻找文件，找到index.html文件则返回 ，
+当用户访问 http://a-bluecake.cc/index , 服务器将在/opt/common/index目录下寻找文件，找到index.html文件则返回 ，
 找不到时其次寻找error.html文件并返回，如果都找不到则报错
 当用户访问 http://a-bluecake.cc/a , 服务器将在/opt目录下寻找文件，找到index.html文件则返回 ，
 找不到时其次寻找error.html文件并返回，如果都找不到则报错
@@ -410,7 +414,7 @@ server {
   location / {
     proxy_pass http://127.0.0.1:8080;
     proxy_set_header Host $host;
-    proxy_set_header X-Forwarded-Photo $scheme;
+    proxy_set_header X-Forwarded-Proto $scheme;
     proxy_set_header X-Real-IP $remote_addr;
   }
 }
@@ -518,7 +522,7 @@ server {
     ssl_certificate_key  /xxx/privkey.pem;  
 
     location /api {
-        proxy_pass 127.0.0.1:8080;
+        proxy_pass  http://127.0.0.1:8080;
     }
 }
 ```
@@ -590,7 +594,7 @@ http {
     ssl_certificate /ca/ssl/fullchain.pem;
     ssl_certificate_key /ca/ssl/privkey.pem;
     location / {
-      proxy_pass 127.0.0.1:8080;
+      proxy_pass http://127.0.0.1:8080;
       proxy_set_header Host $host;
     }
   }
@@ -677,7 +681,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 </div>
 </div>
     <div id="content">
-<div class="markdown-body" id="postBody"><p>ngnix是一款代理服务器软件，主要托管用户的web端80、443端口<br>
+<div class="markdown-body" id="postBody"><p>ngnix是一款代理服务器软件，可以用于托管用户的web端，监听80、443端口<br>
 是目前主流最常用的服务器软件<br>
 本文通过从简单到复杂的方式，一步步教会读者怎么写nginx配置</p>
 <h1>nginx基础语法</h1>
@@ -702,7 +706,9 @@ location / {<br>
 proxy_pass <a href="http://127.0.0.1:8080" rel="nofollow">http://127.0.0.1:8080</a>;<br>
 }<br>
 }<br>
-意思是监听a-bluecake.cc域名的80端口收到的请求，并将其转发给本机8080端口服务</p>
+意思是监听a-bluecake.cc域名的80端口收到的请求，并将其转发给本机8080端口服务<br>
+假设用户访问 <a href="http://a-bluecake.cc/users/mysql" rel="nofollow">http://a-bluecake.cc/users/mysql</a><br>
+nginx将转发请求到 <a href="http://127.0.0.1:8080/users/mysql" rel="nofollow">http://127.0.0.1:8080/users/mysql</a></p>
 <h2>location匹配路由功能</h2>
 <p>在上面配置的基础上，可以写：</p>
 <pre class="notranslate"><code class="notranslate">server {
@@ -722,8 +728,8 @@ proxy_pass <a href="http://127.0.0.1:8080" rel="nofollow">http://127.0.0.1:8080<
 <p>（注：浏览器默认http使用80端口，常写法是<a href="http://a-bluecake.cc/mysql" rel="nofollow">http://a-bluecake.cc/mysql</a> ，不显示写上 :80 ，结果基本一致）</p>
 <h2>nginx静态资源模式</h2>
 <p>关键字：alias root  index<br>
-alias 的作用是注明访问文件的路径<br>
-root 的作用是标注位置作为访问文件的根路径<br>
+alias 的作用是注明访问文件的路径，替换location匹配的前缀<br>
+root 的作用是标注位置作为访问文件的根路径,拼接完整url<br>
 index 用于匹配访问文件的名称<br>
 以如下配置举例：</p>
 <pre class="notranslate"><code class="notranslate">server {
@@ -739,7 +745,7 @@ index 用于匹配访问文件的名称<br>
   }  
 }
 </code></pre>
-<p>当用户访问 <a href="http://a-bluecake.cc/index" rel="nofollow">http://a-bluecake.cc/index</a> , 服务器将在/opt/commom/index目录下寻找文件，找到index.html文件则返回 ，<br>
+<p>当用户访问 <a href="http://a-bluecake.cc/index" rel="nofollow">http://a-bluecake.cc/index</a> , 服务器将在/opt/common/index目录下寻找文件，找到index.html文件则返回 ，<br>
 找不到时其次寻找error.html文件并返回，如果都找不到则报错<br>
 当用户访问 <a href="http://a-bluecake.cc/a" rel="nofollow">http://a-bluecake.cc/a</a> , 服务器将在/opt目录下寻找文件，找到index.html文件则返回 ，<br>
 找不到时其次寻找error.html文件并返回，如果都找不到则报错</p>
@@ -767,7 +773,7 @@ server_name a-bluecake.cc; "#这里写请求传入的域名"<br>
 location / {<br>
 proxy_pass <a href="http://127.0.0.1:8080" rel="nofollow">http://127.0.0.1:8080</a>;<br>
 proxy_set_header Host $host;<br>
-proxy_set_header X-Forwarded-Photo $scheme;<br>
+proxy_set_header X-Forwarded-Proto $scheme;<br>
 proxy_set_header X-Real-IP $remote_addr;<br>
 }<br>
 }<br>
@@ -864,7 +870,7 @@ ssl_certificate_key  服务器私钥的地址</p>
     ssl_certificate_key  /xxx/privkey.pem;  
 
     location /api {
-        proxy_pass 127.0.0.1:8080;
+        proxy_pass  http://127.0.0.1:8080;
     }
 }
 </code></pre>
@@ -926,7 +932,7 @@ nginx完整配置</p>
     ssl_certificate /ca/ssl/fullchain.pem;
     ssl_certificate_key /ca/ssl/privkey.pem;
     location / {
-      proxy_pass 127.0.0.1:8080;
+      proxy_pass http://127.0.0.1:8080;
       proxy_set_header Host $host;
     }
   }
