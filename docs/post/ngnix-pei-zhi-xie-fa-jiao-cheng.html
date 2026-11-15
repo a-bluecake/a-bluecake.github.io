@@ -64,6 +64,7 @@ alias 的作用是注明访问文件的路径
 root 的作用是标注位置作为访问文件的根路径
 index 用于匹配访问文件的名称
 以如下配置举例：
+```
 server {
   listen 80;
   server_name a-bluecake.cc; '#这里写请求传入的域名'
@@ -76,6 +77,7 @@ server {
     index index.html error.html;
   }  
 }
+```
 当用户访问 http://a-bluecake.cc/index , 服务器将在/opt/commom/index目录下寻找文件，找到index.html文件则返回 ，
 找不到时其次寻找error.html文件并返回，如果都找不到则报错
 当用户访问 http://a-bluecake.cc/a , 服务器将在/opt目录下寻找文件，找到index.html文件则返回 ，
@@ -186,8 +188,8 @@ server {
 return 状态码 重定向地址
 通常301表示永久重定向，302表示临时重定向
 当执行return时，nginx会向浏览器返回状态码，同时返回重定向地址，浏览器用重定向地址再访问
-
 完整写法：
+```
 server {
     listen 80;
     server_name a-bluecake.cc;
@@ -199,14 +201,14 @@ server {
         return 301 https://$host$request_uri;
     }
 }
-
+```
 ### nginx 443端写法
 443端需要另写一个server处理
 https使用ssl（tls）握手，需要配置ssl处理
 ssl on; 开启ssl，现在通常使用 listen ssl; 的简化写法
 ssl_certificate   签发证书的地址
 ssl_certificate_key  服务器私钥的地址
-
+```
 server {
     listen 443 ssl;
     server_name a-bluecake.cc;
@@ -218,7 +220,7 @@ server {
         proxy_pass 127.0.0.1:8080;
     }
 }
-
+```
 ### 完整申请证书与nginx配置示范
 
 使用acme.sh申请证书：
@@ -359,6 +361,7 @@ alias 的作用是注明访问文件的路径
 root 的作用是标注位置作为访问文件的根路径
 index 用于匹配访问文件的名称
 以如下配置举例：
+```
 server {
   listen 80;
   server_name a-bluecake.cc; '#这里写请求传入的域名'
@@ -371,6 +374,7 @@ server {
     index index.html error.html;
   }  
 }
+```
 当用户访问 http://a-bluecake.cc/index , 服务器将在/opt/commom/index目录下寻找文件，找到index.html文件则返回 ，
 找不到时其次寻找error.html文件并返回，如果都找不到则报错
 当用户访问 http://a-bluecake.cc/a , 服务器将在/opt目录下寻找文件，找到index.html文件则返回 ，
@@ -481,8 +485,8 @@ server {
 return 状态码 重定向地址
 通常301表示永久重定向，302表示临时重定向
 当执行return时，nginx会向浏览器返回状态码，同时返回重定向地址，浏览器用重定向地址再访问
-
 完整写法：
+```
 server {
     listen 80;
     server_name a-bluecake.cc;
@@ -494,14 +498,14 @@ server {
         return 301 https://$host$request_uri;
     }
 }
-
+```
 ### nginx 443端写法
 443端需要另写一个server处理
 https使用ssl（tls）握手，需要配置ssl处理
 ssl on; 开启ssl，现在通常使用 listen ssl; 的简化写法
 ssl_certificate   签发证书的地址
 ssl_certificate_key  服务器私钥的地址
-
+```
 server {
     listen 443 ssl;
     server_name a-bluecake.cc;
@@ -513,7 +517,7 @@ server {
         proxy_pass 127.0.0.1:8080;
     }
 }
-
+```
 ### 完整申请证书与nginx配置示范
 
 使用acme.sh申请证书：
@@ -716,20 +720,21 @@ proxy_pass <a href="http://127.0.0.1:3306" rel="nofollow">http://127.0.0.1:3306<
 alias 的作用是注明访问文件的路径<br>
 root 的作用是标注位置作为访问文件的根路径<br>
 index 用于匹配访问文件的名称<br>
-以如下配置举例：<br>
-server {<br>
-listen 80;<br>
-server_name a-bluecake.cc; "#这里写请求传入的域名"<br>
-location /index {<br>
-root /opt/common;<br>
-index index.html error.html;<br>
-}<br>
-location /a {<br>
-alias /opt/;<br>
-index index.html error.html;<br>
-}<br>
-}<br>
-当用户访问 <a href="http://a-bluecake.cc/index" rel="nofollow">http://a-bluecake.cc/index</a> , 服务器将在/opt/commom/index目录下寻找文件，找到index.html文件则返回 ，<br>
+以如下配置举例：</p>
+<pre class="notranslate"><code class="notranslate">server {
+  listen 80;
+  server_name a-bluecake.cc; "#这里写请求传入的域名"
+  location /index {
+    root /opt/common;
+    index index.html error.html;
+  }
+  location /a {
+    alias /opt/;
+    index index.html error.html;
+  }  
+}
+</code></pre>
+<p>当用户访问 <a href="http://a-bluecake.cc/index" rel="nofollow">http://a-bluecake.cc/index</a> , 服务器将在/opt/commom/index目录下寻找文件，找到index.html文件则返回 ，<br>
 找不到时其次寻找error.html文件并返回，如果都找不到则报错<br>
 当用户访问 <a href="http://a-bluecake.cc/a" rel="nofollow">http://a-bluecake.cc/a</a> , 服务器将在/opt目录下寻找文件，找到index.html文件则返回 ，<br>
 找不到时其次寻找error.html文件并返回，如果都找不到则报错</p>
@@ -826,36 +831,38 @@ try_files $uri =404;<br>
 <p>关键字 return 重定向：<br>
 return 状态码 重定向地址<br>
 通常301表示永久重定向，302表示临时重定向<br>
-当执行return时，nginx会向浏览器返回状态码，同时返回重定向地址，浏览器用重定向地址再访问</p>
-<p>完整写法：<br>
-server {<br>
-listen 80;<br>
-server_name a-bluecake.cc;<br>
-location /.well-known/acme-challenge/ {<br>
-root /ca;<br>
-try_files $uri =404;<br>
-}<br>
-location / {<br>
-return 301 https://$host$request_uri;<br>
-}<br>
-}</p>
+当执行return时，nginx会向浏览器返回状态码，同时返回重定向地址，浏览器用重定向地址再访问<br>
+完整写法：</p>
+<pre class="notranslate"><code class="notranslate">server {
+    listen 80;
+    server_name a-bluecake.cc;
+    location /.well-known/acme-challenge/ {
+        root /ca;
+        try_files $uri =404;
+    }
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+</code></pre>
 <h3>nginx 443端写法</h3>
 <p>443端需要另写一个server处理<br>
 https使用ssl（tls）握手，需要配置ssl处理<br>
 ssl on; 开启ssl，现在通常使用 listen ssl; 的简化写法<br>
 ssl_certificate   签发证书的地址<br>
 ssl_certificate_key  服务器私钥的地址</p>
-<p>server {<br>
-listen 443 ssl;<br>
-server_name a-bluecake.cc;</p>
-<pre class="notranslate"><code class="notranslate">ssl_certificate      /xxx/fullchain.pem; 
-ssl_certificate_key  /xxx/privkey.pem;  
+<pre class="notranslate"><code class="notranslate">server {
+    listen 443 ssl;
+    server_name a-bluecake.cc;
 
-location /api {
-    proxy_pass 127.0.0.1:8080;
+    ssl_certificate      /xxx/fullchain.pem; 
+    ssl_certificate_key  /xxx/privkey.pem;  
+
+    location /api {
+        proxy_pass 127.0.0.1:8080;
+    }
 }
 </code></pre>
-<p>}</p>
 <h3>完整申请证书与nginx配置示范</h3>
 <p>使用acme.sh申请证书：</p>
 <p>下载安装acme.sh脚本<br>

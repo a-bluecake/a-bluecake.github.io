@@ -52,6 +52,7 @@ alias 的作用是注明访问文件的路径
 root 的作用是标注位置作为访问文件的根路径
 index 用于匹配访问文件的名称
 以如下配置举例：
+```
 server {
   listen 80;
   server_name a-bluecake.cc; "#这里写请求传入的域名"
@@ -64,6 +65,7 @@ server {
     index index.html error.html;
   }  
 }
+```
 当用户访问 http://a-bluecake.cc/index , 服务器将在/opt/commom/index目录下寻找文件，找到index.html文件则返回 ，
 找不到时其次寻找error.html文件并返回，如果都找不到则报错
 当用户访问 http://a-bluecake.cc/a , 服务器将在/opt目录下寻找文件，找到index.html文件则返回 ，
@@ -174,8 +176,8 @@ server {
 return 状态码 重定向地址
 通常301表示永久重定向，302表示临时重定向
 当执行return时，nginx会向浏览器返回状态码，同时返回重定向地址，浏览器用重定向地址再访问
-
 完整写法：
+```
 server {
     listen 80;
     server_name a-bluecake.cc;
@@ -187,14 +189,14 @@ server {
         return 301 https://$host$request_uri;
     }
 }
-
+```
 ### nginx 443端写法
 443端需要另写一个server处理
 https使用ssl（tls）握手，需要配置ssl处理
 ssl on; 开启ssl，现在通常使用 listen ssl; 的简化写法
 ssl_certificate   签发证书的地址
 ssl_certificate_key  服务器私钥的地址
-
+```
 server {
     listen 443 ssl;
     server_name a-bluecake.cc;
@@ -206,7 +208,7 @@ server {
         proxy_pass 127.0.0.1:8080;
     }
 }
-
+```
 ### 完整申请证书与nginx配置示范
 
 使用acme.sh申请证书：
